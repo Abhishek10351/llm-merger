@@ -21,4 +21,6 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("conversations.urls")),
+    path("accounts/", include("accounts.urls")),
 ]
+# TODO: add hot reloading to the server
