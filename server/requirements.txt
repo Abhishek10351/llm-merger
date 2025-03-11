@@ -1,0 +1,8 @@
+python-dotenv
+django
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+blessed
+langchain
+langchain-google-genai
