@@ -1,13 +1,13 @@
 import os
 
 import dotenv
-from blessed import Terminal
 
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import AIMessage, HumanMessage
 
-term = Terminal()
+
 dotenv.load_dotenv()
+
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
@@ -20,6 +20,9 @@ else:
     print("Using Gemini model")
 
 if __name__ == "__main__":
+    from blessed import Terminal
+
+    term = Terminal()
     prompt = input("Enter your message: ")
     chat = []
     while not prompt == "exit":
