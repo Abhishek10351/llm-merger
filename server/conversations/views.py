@@ -4,7 +4,7 @@ from .models import Conversation, Message
 from .serializers import ConversationSerializer, MessageSerializer
 
 from llm_core.utils import message_type
-import llm_core.main as llm_main
+import llm_core.gemini_model as llm_main
 
 chat_model = llm_main.model
 
