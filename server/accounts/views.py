@@ -12,6 +12,7 @@ from datetime import timedelta
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
+
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -21,6 +22,7 @@ class CreateUserView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             data = serializer.data
+            print(data, request.data)
             user = User.objects.create_user(**data)
             headers = self.get_success_headers(serializer.data)
             return Response(UserSerializer(user).data, status=201, headers=headers)
@@ -69,3 +71,8 @@ class UserView(generics.RetrieveAPIView):
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    token_refresh_lifetime = timedelta(days=20)
+    token_lifetime = timedelta(hours=1)

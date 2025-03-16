@@ -1,5 +1,4 @@
-import gemini_model.model as model
-
+from gemini_model import *
 
 if __name__ == "__main__":
     from blessed import Terminal
