@@ -11,7 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+from datetime import timedelta
+import os
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,10 +29,37 @@ SECRET_KEY = "django-insecure-ypw$s216%-44x323d#lz*23yc6n!x%&3njoyg#q3^la58#$$9m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+DEFAULT_ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+if os.getenv("ALLOWED_HOSTS"):
+    DEFAULT_ALLOWED_HOSTS.extend(os.getenv("ALLOWED_HOSTS").split(" "))
+ALLOWED_HOSTS = DEFAULT_ALLOWED_HOSTS
 
 AUTH_USER_MODEL = "accounts.User"
+# CSRF COOKIES
+# CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "http://*"]
+
+# CORS
+# fix cookie issue
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+]
+
+CORS_ALLOW_HEADERS = [
+    "Content-Type",
+    "Authorization",
+    "X-CSRFToken",
+]
+
 
 # Application definition
 
@@ -40,6 +71,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "corsheaders",
+    "rest_framework_simplejwt",
     "accounts.apps.AccountsConfig",
     "conversations.apps.ConversationsConfig",
 ]
@@ -135,4 +168,10 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         # "rest_framework.permissions.IsAuthenticated",
     ],
+}
+# JWT settings
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(weeks=6),
+    "SIGNING_KEY": SECRET_KEY,
 }
