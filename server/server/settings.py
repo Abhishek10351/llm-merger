@@ -36,15 +36,14 @@ ALLOWED_HOSTS = DEFAULT_ALLOWED_HOSTS
 
 AUTH_USER_MODEL = "accounts.User"
 # CSRF COOKIES
-# CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "http://*"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "http://*"]
 
 # CORS
 # fix cookie issue
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+
 CORS_ORIGIN_ALLOW_ALL = True
-
-
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = [
     "GET",
@@ -80,6 +79,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
