@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.hashers import make_password
 
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -20,9 +21,13 @@ class UserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=150, null=True, blank=True)
+    name = models.CharField(max_length=150)
+    first_name = None
+    last_name = None
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
