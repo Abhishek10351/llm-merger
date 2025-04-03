@@ -1,7 +1,7 @@
 from .models import User
 from django.http import JsonResponse
 from rest_framework import viewsets, routers, generics
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .serializers import UserSerializer
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import (
 )
 from datetime import timedelta
 
-from rest_framework.pagination import PageNumberPagination
+from rest_framework import status
 from rest_framework.response import Response
 
 
@@ -21,9 +21,7 @@ class CreateUserView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            data = serializer.data
-            print(data, request.data)
-            user = User.objects.create_user(**data)
+            user = serializer.save()
             headers = self.get_success_headers(serializer.data)
             return Response(UserSerializer(user).data, status=201, headers=headers)
 
@@ -46,19 +44,32 @@ class UserViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            data = serializer.data
-            username = data.get("username", None)
-            User.objects.create_user(username=username, **data)
+            user = serializer.save()
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=201, headers=headers)
-        return Response(serializer.errors, status=400)
+            return Response(
+                serializer.data, status=status.HTTP_201_CREATED, headers=headers
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial
+        )
+        if serializer.is_valid():
+            user = serializer.save()
+            headers = self.get_success_headers(serializer.data)
+            return Response(
+                serializer.data, status=status.HTTP_200_OK, headers=headers
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
-    pagination_class = PageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         return UserSerializer(self.request.user).data
