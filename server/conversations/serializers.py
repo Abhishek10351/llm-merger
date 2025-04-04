@@ -1,25 +1,25 @@
 from rest_framework import serializers
 from .models import Conversation, Message
+from accounts.models import User
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Message
-        fields = ["id", "content", "message_type", "conversation"]
 
-
-class MessageContentSerializer(serializers.ModelSerializer):
-
-    message_type = serializers.CharField(read_only=True)
+    ai_content = serializers.CharField(read_only=True)
 
     class Meta:
         model = Message
-        fields = ["content", "message_type", "conversation"]
+        fields = ["id", "user_content", "ai_content", "created_at"]
 
 
 class ConversationSerializer(serializers.ModelSerializer):
-    messages = MessageContentSerializer(many=True, read_only=True)
+    messages = MessageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Conversation
         fields = ["id", "created_at", "messages"]
+
+    def create(self, **validated_data):
+        user = validated_data.pop("user")
+        conversation = Conversation.objects.create(user=user, **validated_data)
+        return conversation
