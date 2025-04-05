@@ -165,7 +165,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         # "rest_framework.permissions.IsAuthenticated",
@@ -173,7 +173,6 @@ REST_FRAMEWORK = {
 }
 # JWT settings
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(weeks=6),
+    "ACCESS_TOKEN_LIFETIME": timedelta(weeks=5),
     "SIGNING_KEY": SECRET_KEY,
 }

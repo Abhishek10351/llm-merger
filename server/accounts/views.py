@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .serializers import UserSerializer
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
-    TokenRefreshView,
 )
 from datetime import timedelta
 
@@ -35,7 +34,7 @@ class UserViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
-        return User.objects.all()
+        # return User.objects.all()
         if self.request.user.is_staff:
             return User.objects.all()
         else:
@@ -50,19 +49,15 @@ class UserViewSet(viewsets.ModelViewSet):
                 serializer.data, status=status.HTTP_201_CREATED, headers=headers
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
         instance = self.get_object()
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=partial
-        )
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         if serializer.is_valid():
             user = serializer.save()
             headers = self.get_success_headers(serializer.data)
-            return Response(
-                serializer.data, status=status.HTTP_200_OK, headers=headers
-            )
+            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -71,12 +66,8 @@ class UserView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self, *args, **kwargs):
-        return UserSerializer(self.request.user).data
-
     def get(self, request, *args, **kwargs):
         data = UserSerializer(self.request.user).data
-        data.pop("password")
         return JsonResponse(data)
 
 
@@ -84,6 +75,10 @@ router = routers.DefaultRouter()
 router.register(r"users", UserViewSet)
 
 
-class MyTokenObtainPairView(TokenObtainPairView):
-    token_refresh_lifetime = timedelta(days=20)
-    token_lifetime = timedelta(hours=1)
+class CreateToken(TokenObtainPairView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        response.data.pop("refresh")
+        return response
