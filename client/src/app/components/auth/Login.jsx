@@ -5,8 +5,12 @@ import React, { useState } from "react";
 import jwt from "jsonwebtoken";
 import cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { login } from "@/app/store/authSlice";
 
 export default function Login() {
+    const dispatch = useDispatch();
+    const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
@@ -21,17 +25,11 @@ export default function Login() {
             .then((res) => {
                 const accessToken = res.data.access;
                 let decodedToken = jwt.decode(accessToken);
-                const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds
                 const currentTime = Date.now();
                 const expiresIn = expirationTime - currentTime;
                 cookies.set("access", accessToken, {
                     expires: new Date(Date.now() + expiresIn),
                 });
-
-                setTimeout(() => {
-                    useRouter().push("/");
-                }, 2000);
-
             })
             .catch((err) => {
                 console.log(err);
@@ -39,6 +37,19 @@ export default function Login() {
                     "Login failed. Please check your credentials and try again."
                 );
             });
+        api.get("/accounts/me/").then((res) => {
+            const user = res.data;
+            const data = {user: user};
+            try {
+                dispatch(login(data));
+            } catch (error) {
+                console.log(error);
+            }
+        });
+
+        setTimeout(() => {
+            router.push("/");
+        }, 2000);
     };
 
     const handleEmailChange = (e) => {
@@ -49,9 +60,6 @@ export default function Login() {
     };
     const handleErrorClose = () => {
         setError(null);
-    };
-    const handleForgotPassword = () => {
-        navigate("/forgot-password");
     };
 
     return (
