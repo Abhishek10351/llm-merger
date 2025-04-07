@@ -1,9 +1,9 @@
 "use client";
-import api from "@/app/api";
+import { api } from "@/utils";
 import { useEffect } from "react";
 
 import { useDispatch } from "react-redux";
-import { login } from "@/app/store/authSlice";
+import { login } from "@//store/authSlice";
 import { useSelector } from "react-redux";
 
 export default function ProtectedRoute({ children }) {

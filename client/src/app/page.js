@@ -1,4 +1,4 @@
-import { Chatbot, History } from "@/app/components/chat";
+import { Chatbot, History } from "@/components/chat";
 export default function Home() {
     return (
         <main className="flex min-h-screen flex-col items-center justify-between">

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import { logout } from "@/app/store/authSlices";
+// import { logout } from "@//store/authSlices";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 

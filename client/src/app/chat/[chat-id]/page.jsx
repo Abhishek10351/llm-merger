@@ -1,4 +1,4 @@
-import { Chatbot } from "@/app/components/chat";
+import { Chatbot } from "@/components/chat";
 
 export default function ChatPage({ params }) {
     const chatId = params["chat-id"];
