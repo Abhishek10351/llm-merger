@@ -25,7 +25,9 @@ class ConversationViewSet(viewsets.ModelViewSet):
         conversation = Conversation.objects.get(id=pk, user=request.user)
         messages = Message.objects.filter(conversation=pk)
         serialized_messages = [MessageSerializer(m).data for m in messages]
-        return Response(serialized_messages)
+        serialized_conversation = ConversationSerializer(conversation).data
+        serialized_conversation["messages"] = serialized_messages
+        return Response(serialized_conversation)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -60,6 +62,10 @@ class MessageViewSet(viewsets.ModelViewSet):
             user = request.user
             data = serializer.data
             conversation_id = data.get("conversation", None)
+            print(request.data)
+            print("Conversation ID:", conversation_id)
+            if not conversation_id:
+                return Response({"error": "Conversation ID is required."}, status=400)
             conversation = Conversation.objects.get(id=conversation_id, user=user)
             if not conversation:
                 return Response(
@@ -107,3 +113,15 @@ class MessageViewSet(viewsets.ModelViewSet):
         serialized_messages = [MessageSerializer(m).data for m in messages]
 
         return Response(serialized_messages)
+
+
+class NewConversationViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        # get message from request data and create a new conversation
+        data = request.data
+        message = data.get("message", None)
+        if not message:
+            return Response({"error": "Message is required."}, status=400)

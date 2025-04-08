@@ -7,10 +7,10 @@ class MessageSerializer(serializers.ModelSerializer):
 
     ai_content = serializers.CharField(read_only=True)
 
+
     class Meta:
         model = Message
-        fields = ["id", "user_content", "ai_content", "created_at"]
-
+        fields = ["id", "user_content", "ai_content", "conversation"]
 
 class ConversationSerializer(serializers.ModelSerializer):
     messages = MessageSerializer(many=True, read_only=True)
