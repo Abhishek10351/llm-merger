@@ -1,11 +1,17 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from .models import Conversation, Message
 from accounts.models import User
-from .serializers import ConversationSerializer, MessageSerializer
+from .serializers import (
+    ConversationSerializer,
+    MessageSerializer,
+    NewConversationSerializer,
+)
 
-from llm_core.utils import message_type
+from llm_core.utils import generate_title
+
 import llm_core.gemini_model as llm_main
 
 chat_model = llm_main.model
@@ -18,8 +24,19 @@ class ConversationViewSet(viewsets.ModelViewSet):
     serializer_class = ConversationSerializer
     permission_classes = [IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+        return Response(
+            {"message": "This endpoint is not meant for creating conversations."},
+            status=405,
+        )
+
     def get_queryset(self):
         return Conversation.objects.filter(user=self.request.user)
+    
+    def list(self, request, *args, **kwargs):
+        conversations = self.get_queryset()
+        serialized_conversations = [ConversationSerializer(c).data for c in conversations]
+        return Response(serialized_conversations)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         conversation = Conversation.objects.get(id=pk, user=request.user)
@@ -28,18 +45,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
         serialized_conversation = ConversationSerializer(conversation).data
         serialized_conversation["messages"] = serialized_messages
         return Response(serialized_conversation)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-
-            user = request.user
-            data = serializer.data
-            conversation = serializer.create(**data)
-            conversation.save()
-            return Response(ConversationSerializer(conversation).data, status=201)
-        return Response(serializer.errors, status=400)
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -50,8 +55,6 @@ class MessageViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            print("Serializer is valid")
-            # return
             user = request.user
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
@@ -62,8 +65,6 @@ class MessageViewSet(viewsets.ModelViewSet):
             user = request.user
             data = serializer.data
             conversation_id = data.get("conversation", None)
-            print(request.data)
-            print("Conversation ID:", conversation_id)
             if not conversation_id:
                 return Response({"error": "Conversation ID is required."}, status=400)
             conversation = Conversation.objects.get(id=conversation_id, user=user)
@@ -94,7 +95,6 @@ class MessageViewSet(viewsets.ModelViewSet):
             )
             messages.append(ai_message_obj)
             serialized_messages = [MessageSerializer(m).data for m in messages]
-
             headers = self.get_success_headers(serializer.data)
             return Response(serialized_messages, status=201, headers=headers)
 
@@ -115,13 +115,28 @@ class MessageViewSet(viewsets.ModelViewSet):
         return Response(serialized_messages)
 
 
-class NewConversationViewSet(viewsets.ViewSet):
+class NewConversation(generics.CreateAPIView):
+    serializer_class = NewConversationSerializer
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        user = request.user
-        # get message from request data and create a new conversation
-        data = request.data
-        message = data.get("message", None)
-        if not message:
-            return Response({"error": "Message is required."}, status=400)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = request.user
+            title = generate_title(serializer.data["user_content"])
+            ai_message = chat_model.invoke(serializer.data["user_content"])
+            conversation = Conversation.objects.create(
+                user=user,
+                title=title,
+            )
+            conversation.save()
+            message = Message.objects.create(
+                conversation=conversation,
+                user_content=serializer.data["user_content"],
+                ai_content=ai_message.content,
+            )
+            message.save()
+            # properly serialize data before  returning it
+            new_serializer = ConversationSerializer(conversation)
+            new_serializer.data["messages"] = [MessageSerializer(message).data]
+            return Response(new_serializer.data, status=201)
