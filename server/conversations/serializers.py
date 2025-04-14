@@ -12,8 +12,14 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ["id", "user_content", "ai_content", "conversation"]
 
 
+class MessageContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ["user_content", "ai_content"]
+
+
 class ConversationSerializer(serializers.ModelSerializer):
-    messages = MessageSerializer(many=True, read_only=True)
+    messages = MessageContentSerializer(many=True, read_only=True)
     title = serializers.CharField(read_only=True)
 
     class Meta:
@@ -24,6 +30,12 @@ class ConversationSerializer(serializers.ModelSerializer):
         user = validated_data.pop("user")
         conversation = Conversation.objects.create(user=user, **validated_data)
         return conversation
+
+
+class ConversationListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Conversation
+        fields = ["id", "title"]
 
 
 class NewConversationSerializer(serializers.Serializer):

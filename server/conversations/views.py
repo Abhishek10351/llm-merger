@@ -6,7 +6,9 @@ from .models import Conversation, Message
 from accounts.models import User
 from .serializers import (
     ConversationSerializer,
+    ConversationListSerializer,
     MessageSerializer,
+    ConversationListSerializer,
     NewConversationSerializer,
 )
 
@@ -32,18 +34,26 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Conversation.objects.filter(user=self.request.user)
-    
+
+    def get_object(self, pk):
+        try:
+            return Conversation.objects.get(id=pk, user=self.request.user)
+        except Conversation.DoesNotExist:
+            return None
+
     def list(self, request, *args, **kwargs):
         conversations = self.get_queryset()
-        serialized_conversations = [ConversationSerializer(c).data for c in conversations]
-        return Response(serialized_conversations)
+        serializer = ConversationListSerializer(conversations, many=True)
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        conversation = Conversation.objects.get(id=pk, user=request.user)
-        messages = Message.objects.filter(conversation=pk)
-        serialized_messages = [MessageSerializer(m).data for m in messages]
+        conversation = self.get_object(pk)
+        if conversation is None:
+            return Response(
+                {"error": "You do not have permission to access this conversation."},
+                status=403,
+            )
         serialized_conversation = ConversationSerializer(conversation).data
-        serialized_conversation["messages"] = serialized_messages
         return Response(serialized_conversation)
 
 
@@ -52,12 +62,13 @@ class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return Message.objects.filter(conversation__user=self.request.user)
+
     def list(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            user = request.user
-            return Response(serializer.data, status=200)
-        return Response(serializer.errors, status=400)
+        return Response(
+            {"message": "This endpoint is not meant for listing messages."}, status=405
+        )
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
