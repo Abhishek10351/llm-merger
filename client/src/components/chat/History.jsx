@@ -14,14 +14,14 @@ export default function History() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <button
+            {/* <button
                 onClick={toggleHistory}
                 className="mb-4 bg-blue-500 text-white px-4 py-2 rounded cursor-pointer shadow hover:bg-blue-700 transition duration-200"
             >
                 {showHistory ? "Hide History" : "Show History"}
-            </button>
+            </button> */}
             {showHistory && (
-                <div className="bg-white w-full max-w-md rounded shadow-md p-4 ">
+                <div className="bg-white w-full max-w-md rounded shadow-md ">
                     <h1 className="text-2xl font-bold mb-4 text-center text-slate-500">
                         History
                     </h1>
