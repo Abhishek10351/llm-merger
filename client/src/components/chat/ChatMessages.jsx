@@ -1,6 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import { CodeBlock, atomOneDark } from "react-code-blocks";
-
+import { Highlight, themes } from "prism-react-renderer";
 const components_style = {
     ul: ({ children }) => (
         <ul className="list-none pl-8 mb-4 text-gray-200">{children}</ul>
@@ -30,13 +29,33 @@ const components_style = {
             );
         } else if (match) {
             return (
-                <CodeBlock
-                    text={String(children).replace(/\n$/, "")}
+                <Highlight
+                    {...props}
+                    code={String(children).trim()}
                     language={match[1]}
-                    showLineNumbers={false}
-                    theme={atomOneDark}
-                    wrapLines={true}
-                />
+                    theme={themes.oneDark}
+                >
+                    {({ style, tokens, getLineProps, getTokenProps }) => (
+                        <pre
+                            className="rounded bg-gray-800 p-4 overflow-x-auto"
+                            style={style}
+                        >
+                            {tokens.map((line, i) => (
+                                <div
+                                    key={i}
+                                    {...getLineProps({ line, key: i })}
+                                >
+                                    {line.map((token, key) => (
+                                        <span
+                                            key={key}
+                                            {...getTokenProps({ token, key })}
+                                        />
+                                    ))}
+                                </div>
+                            ))}
+                        </pre>
+                    )}
+                </Highlight>
             );
         }
         return (
@@ -46,6 +65,23 @@ const components_style = {
         );
     },
 };
+
+const prism_style = {
+    ...themes.vsDark,
+    plain: {
+        ...themes.vsDark.plain,
+        color: "#ffffff",
+    },
+    styles: themes.vsDark.styles.map((style) => {
+        return {
+            ...style,
+            style: {
+                ...style.style,
+                color: "#ffffff",
+            },
+        };
+    }),
+}
 export default function ChatMessages({ messages }) {
     return (
         <div className="h- overflow-y-scroll border rounded p-4 bg-gray-5 bg-purple-300">
