@@ -1,5 +1,4 @@
 import { Chatbot, History } from "@/components/chat";
-
 export default async function ChatPage({ params }) {
     const chatId = (await params)["chat-id"];
 

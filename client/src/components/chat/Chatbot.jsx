@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { api } from "@/utils";
 import ChatMessages from "./ChatMessages";
+import { ChatInput } from "@/components/ui";
 
-export default function Chatbot({ chat_id }) {
+export default function Chatbot({ chat_id, blank_chat=false }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ export default function Chatbot({ chat_id }) {
         setError(null);
 
         try {
-            const response = await api.get(`/conversations/${chat_id}`);
+            const response = await api.get(`/conversations/${chat_id}/`);
             if (response.status === 200) {
                 setMessages(response.data.messages);
             } else {
@@ -35,7 +36,9 @@ export default function Chatbot({ chat_id }) {
 
     const handleSendMessage = (e) => {
         e.preventDefault();
+
         if (!input.trim()) return;
+        setLoading(true);
 
         const newMessage = { user_content: input };
 
@@ -46,9 +49,17 @@ export default function Chatbot({ chat_id }) {
         };
         api.post("/messages/", data)
             .then((response) => {
-                setMessages(response.data);
+                const message = response.data;
+                setMessages((prevMessages) => {
+                    const updatedMessages = [...prevMessages];
+                    updatedMessages.pop();
+                    updatedMessages.push(message);
+                    return updatedMessages;
+                });
+                setLoading(false);
             })
             .catch((error) => {
+                setLoading(false);
                 console.error("Error sending message:", error);
             });
 
@@ -64,21 +75,12 @@ export default function Chatbot({ chat_id }) {
 
             {/* Input Section */}
             <div className="sticky bottom-0 bg-gray-100 p-4 border-t">
-                <form onSubmit={handleSendMessage} className="flex">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Type your message..."
-                        className="flex-grow border rounded-l px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
-                    />
-                    <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-r focus:outline-none"
-                    >
-                        Send
-                    </button>
-                </form>
+                <ChatInput
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onSubmit={handleSendMessage}
+                    loading={loading}
+                />
             </div>
         </div>
     );

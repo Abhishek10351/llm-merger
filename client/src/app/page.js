@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+import { ChatInput } from "@/components/ui";
+
 export default function ChatHomePage() {
     const [input, setInput] = useState("");
     const router = useRouter();
     useEffect(() => {
         router.push("/chat");
-
     }, []);
 
     return (
@@ -18,23 +19,12 @@ export default function ChatHomePage() {
                     Start a New Conversation
                 </h1>
                 <div className="h-[calc(100vh-250px)] flex overflow-y-auto border rounded bg-purple-300"></div>
-                <form className="mt-4 flex">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Enter a title for your conversation..."
-                        className="flex-grow border rounded-l px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
-                    />
-                    <button
-                        type="submit"
-                        className={`
-                            "bg-blue-500 hover:bg-blue-700"
-                     text-white font-bold px-4 py-2 rounded-r focus:outline-none`}
-                    >
-                        Loading
-                    </button>
-                </form>
+                <ChatInput
+                    value={input}
+                    onChange={(e) => {}}
+                    onSubmit={(e) => {}}
+                    loading={false}
+                />
             </div>
         </div>
     );

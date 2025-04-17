@@ -4,7 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils";
 
+import { useDispatch } from "react-redux";
+import { addConversation } from "@/store/historySlice";
+
+import { ChatInput } from "@/components/ui";
+
 export default function ChatHomePage() {
+    const dispatch = useDispatch();
+
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -22,6 +29,12 @@ export default function ChatHomePage() {
 
         api.post("/new_conversation/", data)
             .then((response) => {
+                const newData = response.data;
+                const newConversation = {
+                    id: newData.id,
+                    title: newData.title,
+                };
+                dispatch(addConversation(newConversation));
                 router.push(`/chat/${response.data.id}`);
             })
             .catch((error) => {
@@ -42,34 +55,19 @@ export default function ChatHomePage() {
                 </h1>
                 <div className="h-[calc(100vh-250px)] flex overflow-y-auto border rounded bg-purple-300">
                     {loading && (
-                        <div className="mb-2 flex flex-col">
+                        <div className="mb-2 flex flex-col flex-grow">
                             <div className="px-4 py-2 mb-2 rounded-lg self-end bg-gray-500 w-[300px] text-white">
                                 {messages[0]}
                             </div>
                         </div>
                     )}
                 </div>
-                <form onSubmit={handleSendMessage} className="mt-4 flex">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Ask me anything..."
-                        disabled={loading}
-                        className="flex-grow border rounded-l px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
-                    />
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className={`${
-                            loading
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-blue-500 hover:bg-blue-700"
-                        } text-white font-bold px-4 py-2 rounded-r focus:outline-none`}
-                    >
-                        {loading ? "Creating..." : "Create"}
-                    </button>
-                </form>
+                <ChatInput
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onSubmit={handleSendMessage}
+                    loading={loading}
+                />
                 {error && <p className="mt-4 text-red-500 text-sm">{error}</p>}
             </div>
         </div>
