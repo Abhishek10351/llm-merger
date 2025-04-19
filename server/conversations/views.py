@@ -35,24 +35,22 @@ class ConversationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Conversation.objects.filter(user=self.request.user)
 
-    def get_object(self, pk):
-        try:
-            return Conversation.objects.get(id=pk, user=self.request.user)
-        except Conversation.DoesNotExist:
-            return None
-
     def list(self, request, *args, **kwargs):
         conversations = self.get_queryset()
         serializer = ConversationListSerializer(conversations, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        conversation = self.get_object(pk)
-        if conversation is None:
+        try:
+            conversation = Conversation.objects.get(id=pk)
+        except Conversation.DoesNotExist:
+            return Response({"error": "Conversation not found."}, status=404)
+        if conversation.user != request.user:
             return Response(
                 {"error": "You do not have permission to access this conversation."},
                 status=403,
             )
+
         serialized_conversation = ConversationSerializer(conversation).data
         return Response(serialized_conversation)
 
@@ -63,7 +61,9 @@ class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Message.objects.filter(conversation__user=self.request.user)
+        return Message.objects.filter(
+            conversation__user=self.request.user,
+        )
 
     def list(self, request, *args, **kwargs):
         return Response(
@@ -86,7 +86,6 @@ class MessageViewSet(viewsets.ModelViewSet):
                     },
                     status=403,
                 )
-            data.pop("conversation")
             messages = list(Message.objects.filter(conversation=conversation))
 
             chat = []
@@ -104,10 +103,8 @@ class MessageViewSet(viewsets.ModelViewSet):
                 user_content=data["user_content"],
                 ai_content=ai_message,
             )
-            messages.append(ai_message_obj)
-            serialized_messages = [MessageSerializer(m).data for m in messages]
             headers = self.get_success_headers(serializer.data)
-            return Response(serialized_messages, status=201, headers=headers)
+            return Response(MessageSerializer(ai_message_obj).data, status=201)
 
         return Response(serializer.errors, status=400)
 
@@ -119,11 +116,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 status=403,
             )
 
-        conversation = message.conversation
-        messages = Message.objects.filter(conversation=conversation)
-        serialized_messages = [MessageSerializer(m).data for m in messages]
-
-        return Response(serialized_messages)
+        return Response(MessageSerializer(message).data)
 
 
 class NewConversation(generics.CreateAPIView):

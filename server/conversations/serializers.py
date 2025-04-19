@@ -15,7 +15,7 @@ class MessageSerializer(serializers.ModelSerializer):
 class MessageContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ["user_content", "ai_content"]
+        fields = ["id", "user_content", "ai_content"]
 
 
 class ConversationSerializer(serializers.ModelSerializer):
