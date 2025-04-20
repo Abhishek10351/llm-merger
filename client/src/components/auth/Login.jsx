@@ -10,7 +10,6 @@ import { login } from "@//store/authSlice";
 
 export default function Login() {
     const dispatch = useDispatch();
-    const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
@@ -26,10 +25,12 @@ export default function Login() {
                 const accessToken = res.data.access;
                 let decodedToken = jwt.decode(accessToken);
                 const currentTime = Date.now();
-                const expiresIn = expirationTime - currentTime;
+                const expiresIn = decodedToken.exp * 1000 - currentTime;
                 cookies.set("access", accessToken, {
                     expires: new Date(Date.now() + expiresIn),
                 });
+
+                router.push("/chat");
             })
             .catch((err) => {
                 console.log(err);
@@ -37,15 +38,16 @@ export default function Login() {
                     "Login failed. Please check your credentials and try again."
                 );
             });
-        api.get("/accounts/me/").then((res) => {
-            const user = res.data;
-            const data = {user: user};
-            try {
-                dispatch(login(data));
-            } catch (error) {
-                console.log(error);
-            }
-        });
+
+        api.get("accounts/me/")
+            .then((res) => {
+                const user = res.data;
+                dispatch(login({ user }));
+            })
+            .catch((err) => {
+                console.log(err);
+                setError("Failed to fetch user data.");
+            });
 
         setTimeout(() => {
             router.push("/");

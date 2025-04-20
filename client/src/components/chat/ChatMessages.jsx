@@ -66,22 +66,6 @@ const components_style = {
     },
 };
 
-const prism_style = {
-    ...themes.vsDark,
-    plain: {
-        ...themes.vsDark.plain,
-        color: "#ffffff",
-    },
-    styles: themes.vsDark.styles.map((style) => {
-        return {
-            ...style,
-            style: {
-                ...style.style,
-                color: "#ffffff",
-            },
-        };
-    }),
-}
 export default function ChatMessages({ messages }) {
     return (
         <div className="h- overflow-y-scroll border rounded p-4 bg-gray-5 bg-purple-300">
