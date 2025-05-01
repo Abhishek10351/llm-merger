@@ -1,4 +1,5 @@
 from gemini_model import *
+from deepseek_model import *
 
 if __name__ == "__main__":
     from blessed import Terminal
@@ -10,8 +11,8 @@ if __name__ == "__main__":
 
         message = HumanMessage(prompt)
         chat.append(message)
-        response = model.invoke(chat)
+        response = deepseek_model.invoke(chat)
         model_response = AIMessage(response.content)
         chat.append(model_response)
-        print(f"{term.green("Gemini:")} {term.cyan(model_response.content)}")
+        print(f"{term.green("DeepSeek:")} {term.cyan(model_response.content)}")
         prompt = input("Enter your message: ")

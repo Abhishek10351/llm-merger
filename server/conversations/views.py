@@ -14,9 +14,7 @@ from .serializers import (
 
 from llm_core.utils import generate_title
 
-import llm_core.gemini_model as llm_main
-
-chat_model = llm_main.model
+from llm_core import deepseek_model, gemini_model
 
 from langchain_core.messages import HumanMessage, AIMessage
 
@@ -54,6 +52,24 @@ class ConversationViewSet(viewsets.ModelViewSet):
         serialized_conversation = ConversationSerializer(conversation).data
         return Response(serialized_conversation)
 
+    def update(self, request, pk=None):
+        try:
+            conversation = Conversation.objects.get(id=pk)
+        except Conversation.DoesNotExist:
+            return Response({"error": "Conversation not found."}, status=404)
+        if conversation.user != request.user:
+            return Response(
+                {"error": "You do not have permission to access this conversation."},
+                status=403,
+            )
+        messages = list(
+            MessageSerializer(
+                Message.objects.filter(conversation=conversation), many=True
+            ).data
+        )
+
+        return Response(messages)
+
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
@@ -88,20 +104,30 @@ class MessageViewSet(viewsets.ModelViewSet):
                 )
             messages = list(Message.objects.filter(conversation=conversation))
 
-            chat = []
+            gemini_chat = []
             for msg in messages:
                 if msg.user_content:
-                    chat.append(HumanMessage(msg.user_content))
+                    gemini_chat.append(HumanMessage(msg.user_content))
                 if msg.ai_content:
-                    chat.append(AIMessage(msg.ai_content))
-            chat.append(HumanMessage(data["user_content"]))
+                    gemini_chat.append(AIMessage(msg.ai_content))
+            gemini_chat.append(HumanMessage(data["user_content"]))
+            response = gemini_model.invoke(gemini_chat)
+            gemini_message = response.content
+            deepseek_chat = []
+            for msg in messages:
+                if msg.user_content:
+                    deepseek_chat.append(HumanMessage(msg.user_content))
+                if msg.ai_content:
+                    deepseek_chat.append(AIMessage(msg.deepseek_content))
+            deepseek_chat.append(AIMessage(data["user_content"]))
+            response = deepseek_model.invoke(deepseek_chat)
+            deepseek_message = response.content
 
-            response = chat_model.invoke(chat)
-            ai_message = response.content
             ai_message_obj = Message.objects.create(
                 conversation=conversation,
                 user_content=data["user_content"],
-                ai_content=ai_message,
+                ai_content=gemini_message,
+                deepseek_content=deepseek_message,
             )
             headers = self.get_success_headers(serializer.data)
             return Response(MessageSerializer(ai_message_obj).data, status=201)
@@ -128,7 +154,8 @@ class NewConversation(generics.CreateAPIView):
         if serializer.is_valid():
             user = request.user
             title = generate_title(serializer.data["user_content"])
-            ai_message = chat_model.invoke(serializer.data["user_content"])
+            ai_message = gemini_model.invoke(serializer.data["user_content"])
+            deepseek_content = deepseek_model.invoke(serializer.data["user_content"])
             conversation = Conversation.objects.create(
                 user=user,
                 title=title,
@@ -138,6 +165,7 @@ class NewConversation(generics.CreateAPIView):
                 conversation=conversation,
                 user_content=serializer.data["user_content"],
                 ai_content=ai_message.content,
+                deepseek_content=deepseek_content.content,
             )
             message.save()
             # properly serialize data before  returning it

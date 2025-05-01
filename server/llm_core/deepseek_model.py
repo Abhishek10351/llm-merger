@@ -7,7 +7,6 @@ from langchain_core.messages import AIMessage, HumanMessage
 
 dotenv.load_dotenv()
 
-
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 
 if DEEPSEEK_API_KEY is None:
