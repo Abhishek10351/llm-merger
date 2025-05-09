@@ -108,8 +108,8 @@ class MessageViewSet(viewsets.ModelViewSet):
             for msg in messages:
                 if msg.user_content:
                     gemini_chat.append(HumanMessage(msg.user_content))
-                if msg.ai_content:
-                    gemini_chat.append(AIMessage(msg.ai_content))
+                if msg.gemini_content:
+                    gemini_chat.append(AIMessage(msg.gemini_content))
             gemini_chat.append(HumanMessage(data["user_content"]))
             response = gemini_model.invoke(gemini_chat)
             gemini_message = response.content
@@ -117,7 +117,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             for msg in messages:
                 if msg.user_content:
                     deepseek_chat.append(HumanMessage(msg.user_content))
-                if msg.ai_content:
+                if msg.gemini_content:
                     deepseek_chat.append(AIMessage(msg.deepseek_content))
             deepseek_chat.append(AIMessage(data["user_content"]))
             response = deepseek_model.invoke(deepseek_chat)
@@ -126,7 +126,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             ai_message_obj = Message.objects.create(
                 conversation=conversation,
                 user_content=data["user_content"],
-                ai_content=gemini_message,
+                gemini_content=gemini_message,
                 deepseek_content=deepseek_message,
             )
             headers = self.get_success_headers(serializer.data)
@@ -164,7 +164,7 @@ class NewConversation(generics.CreateAPIView):
             message = Message.objects.create(
                 conversation=conversation,
                 user_content=serializer.data["user_content"],
-                ai_content=ai_message.content,
+                gemini_content=ai_message.content,
                 deepseek_content=deepseek_content.content,
             )
             message.save()

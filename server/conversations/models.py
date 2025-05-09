@@ -13,12 +13,11 @@ class Conversation(models.Model):
 
 class Message(models.Model):
     user_content = models.TextField()
-    ai_content = models.TextField()
+    gemini_content = models.TextField()
     deepseek_content = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     conversation = models.ForeignKey(
         Conversation, related_name="messages", on_delete=models.CASCADE
     )
 
-    def __str__(self):
-        return f" {self.user_content[:20]}... - {self.ai_content[:20]}..."
+

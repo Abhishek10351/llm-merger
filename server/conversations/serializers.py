@@ -5,7 +5,7 @@ from accounts.models import User
 
 class MessageSerializer(serializers.ModelSerializer):
 
-    ai_content = serializers.CharField(read_only=True)
+    gemini_content = serializers.CharField(read_only=True)
     deepseek_content = serializers.CharField(read_only=True)
 
     class Meta:
@@ -13,7 +13,7 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user_content",
-            "ai_content",
+            "gemini_content",
             "deepseek_content",
             "conversation",
         ]
@@ -25,7 +25,7 @@ class MessageContentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "user_content",
-            "ai_content",
+            "gemini_content",
             "deepseek_content",
         ]
 
