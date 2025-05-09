@@ -7,11 +7,7 @@ const components_style = {
     ol: ({ children }) => (
         <ol className="list-decimal pl-6 mb-4 text-gray-200">{children}</ol>
     ),
-    li: ({ children }) => (
-        <li className="mb-2 pl-2 before:content-['•'] before:mr-2 before:text-blue-500">
-            {children}
-        </li>
-    ),
+    li: ({ children }) => <li className="mb-2 pl-2">{children}</li>,
     strong: ({ children }) => (
         <strong className="text-violet-400 font-bold">{children}</strong>
     ),
@@ -66,7 +62,7 @@ const components_style = {
     },
 };
 
-export default function ChatMessages({ messages }) {
+export default function ChatMessages({ messages, selectedLlm }) {
     return (
         <div className="h- overflow-y-scroll border rounded p-4 bg-gray-5 bg-purple-300">
             <div className="mb-2 flex flex-col">
@@ -75,10 +71,10 @@ export default function ChatMessages({ messages }) {
                         <div className="px-4 py-2 mb-2 rounded-lg self-end bg-blue-500 w-[400px] text-white">
                             {message["user_content"]}
                         </div>
-                        {message["ai_content"] && (
+                        {message[selectedLlm] && (
                             <div className="px-4 py-2 mb-2 rounded-lg self-start bg-gray-600 w-[800px] text-white">
                                 <ReactMarkdown components={components_style}>
-                                    {message["ai_content"]}
+                                    {message[selectedLlm]}
                                 </ReactMarkdown>
                             </div>
                         )}

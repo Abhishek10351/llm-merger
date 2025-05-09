@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import { api } from "@/utils";
 import ChatMessages from "./ChatMessages";
 import { ChatInput } from "@/components/ui";
+import { LLMSelect } from ".";
 
-export default function Chatbot({ chat_id, blank_chat=false }) {
+export default function Chatbot({ chat_id, blank_chat = false }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [selectedLlm, setSelectedLlm] = useState("gemini_content");
 
     const fetchChat = async () => {
         setLoading(true);
@@ -68,9 +70,11 @@ export default function Chatbot({ chat_id, blank_chat=false }) {
 
     return (
         <div className="flex flex-col h-full">
+            <LLMSelect onChange={setSelectedLlm} defaultValue={selectedLlm} />
+
             {/* Chat Messages Area */}
             <div className="flex-grow overflow-y-auto">
-                <ChatMessages messages={messages} />
+                <ChatMessages messages={messages} selectedLlm={selectedLlm} />
             </div>
 
             {/* Input Section */}
