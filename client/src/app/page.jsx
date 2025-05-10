@@ -10,7 +10,7 @@ export default function ChatHomePage() {
     const router = useRouter();
     useEffect(() => {
         router.push("/chat");
-    }, []);
+    });
 
     return (
         <div className="flex flex-col items-center min-h-[calc(100vh-100px)] bg-gray-100">

@@ -22,7 +22,7 @@ const historySlice = createSlice({
         },
         removeConversation(state, action) {
             state.conversations = state.conversations.filter(
-                (conversation) => conversation.id !== action.payload.id
+                (conversation) => conversation.id !== action.payload
             );
         },
         clearHistory(state) {
