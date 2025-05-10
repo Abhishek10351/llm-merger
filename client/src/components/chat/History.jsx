@@ -1,44 +1,35 @@
 "use client";
-
 import HistoryButton from "./HistoryButton";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { removeConversation } from "@/store/historySlice";
 
 export default function History() {
     const { conversations } = useSelector((state) => state.history);
-    const [showHistory, setShowHistory] = useState(true);
+    const dispatch = useDispatch();
 
-    const toggleHistory = () => {
-        setShowHistory((prev) => !prev);
+    const handleDelete = (id) => {
+        dispatch(removeConversation(id));
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            {/* <button
-                onClick={toggleHistory}
-                className="mb-4 bg-blue-500 text-white px-4 py-2 rounded cursor-pointer shadow hover:bg-blue-700 transition duration-200"
-            >
-                {showHistory ? "Hide History" : "Show History"}
-            </button> */}
-            {showHistory && (
-                <div className="bg-white w-full max-w-md rounded shadow-md ">
-                    <h1 className="text-2xl font-bold mb-4 text-center text-slate-500">
+        <div className="flex flex-col items-center justify-center bg-gray-100">
+            <div className="bg-white w-full max-w-md rounded shadow-md">
+                <div className="overflow-y-auto border rounded p-4 bg-gray-50 mt-3">
+                    <h1 className="text-lg font-bold mb-1 text-slate-500 pl-4">
                         History
                     </h1>
-                    <div className="h-96 overflow-y-auto border rounded p-4 bg-gray-50">
-                        <div className="mb-2 flex flex-col">
-                            {conversations.map((message) => (
-                                <HistoryButton
-                                    key={message.id}
-                                    id={message.id}
-                                    title={message.title}
-                                    onClick={() => {}}
-                                />
-                            ))}
-                        </div>
+                    <div className="mb-2 flex flex-col">
+                        {conversations.map((message) => (
+                            <HistoryButton
+                                key={message.id}
+                                id={message.id}
+                                title={message.title}
+                                onDelete={handleDelete}
+                            />
+                        ))}
                     </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 }
