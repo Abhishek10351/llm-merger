@@ -1,5 +1,5 @@
 "use client";
-import HistoryButton from "./HistoryButton";
+import HistoryButton from "./ChatHistoryButton";
 import { useSelector, useDispatch } from "react-redux";
 import { removeConversation } from "@/store/historySlice";
 

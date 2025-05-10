@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/utils";
-import ChatMessages from "./ChatMessages";
-import { ChatInput } from "@/components/ui";
-import { LLMSelect } from ".";
+import { ModelSelector } from "@/components/ui";
+import ChatMessagesSection from "./ChatMessagesSection";
+import ChatInputSection from "./ChatInputSection";
 
 export default function Chatbot({ chat_id, blank_chat = false }) {
     const [messages, setMessages] = useState([]);
@@ -70,22 +70,22 @@ export default function Chatbot({ chat_id, blank_chat = false }) {
 
     return (
         <div className="flex flex-col h-full">
-            <LLMSelect onChange={setSelectedLlm} defaultValue={selectedLlm} />
+            <ModelSelector
+                onChange={setSelectedLlm}
+                defaultValue={selectedLlm}
+            />
 
-            {/* Chat Messages Area */}
-            <div className="flex-grow overflow-y-auto">
-                <ChatMessages messages={messages} selectedLlm={selectedLlm} />
-            </div>
+            <ChatMessagesSection
+                messages={messages}
+                selectedLlm={selectedLlm}
+            />
 
-            {/* Input Section */}
-            <div className="sticky bottom-0 bg-gray-100 p-4 border-t">
-                <ChatInput
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onSubmit={handleSendMessage}
-                    loading={loading}
-                />
-            </div>
+            <ChatInputSection
+                input={input}
+                setInput={setInput}
+                handleSendMessage={handleSendMessage}
+                loading={loading}
+            />
         </div>
     );
 }

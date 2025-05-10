@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils";
-
 import { useDispatch } from "react-redux";
 import { addConversation } from "@/store/historySlice";
-
-import { ChatInput } from "@/components/ui";
+import ChatMessagesSection from "@/components/chat/ChatMessagesSection";
+import ChatInputSection from "@/components/chat/ChatInputSection";
+import { ChatSidebar } from "@/components/chat";
 
 export default function ChatHomePage() {
     const dispatch = useDispatch();
@@ -23,9 +23,9 @@ export default function ChatHomePage() {
         if (!input.trim()) return;
 
         setLoading(true);
-        setMessages([input]);
         setError(null);
         const data = { user_content: input };
+        setMessages([data]);
 
         api.post("/new_conversation/", data)
             .then((response) => {
@@ -48,28 +48,28 @@ export default function ChatHomePage() {
     };
 
     return (
-        <div className="flex flex-col items-center min-h-[calc(100vh-100px)] bg-gray-100">
-            <div className="bg-white w-full rounded shadow-md p-4">
-                <h1 className="text-2xl font-bold mb-4 text-center text-slate-500">
-                    Start a New Conversation
-                </h1>
-                <div className="h-[calc(100vh-250px)] flex overflow-y-auto border rounded bg-purple-300">
-                    {loading && (
-                        <div className="mb-2 flex flex-col flex-grow">
-                            <div className="px-4 py-2 mb-2 rounded-lg self-end bg-gray-500 w-[300px] text-white">
-                                {messages[0]}
-                            </div>
-                        </div>
+        <div className="flex flex-row">
+            {/* ChatSidebar */}
+            <ChatSidebar />
+
+            {/* Main Content */}
+            <main className="flex-grow flex flex-col items-center bg-gray-100">
+                <div className="bg-white w-full rounded shadow-md p-4 mt-3 flex-grow overflow-y-auto flex flex-col">
+                    <h1 className="text-2xl font-bold mb-4 text-center text-slate-500">
+                        Start a New Conversation
+                    </h1>
+                        <ChatMessagesSection messages={messages} />
+                    <ChatInputSection
+                        input={input}
+                        setInput={setInput}
+                        handleSendMessage={handleSendMessage}
+                        loading={loading}
+                    />
+                    {error && (
+                        <p className="mt-4 text-red-500 text-sm">{error}</p>
                     )}
                 </div>
-                <ChatInput
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onSubmit={handleSendMessage}
-                    loading={loading}
-                />
-                {error && <p className="mt-4 text-red-500 text-sm">{error}</p>}
-            </div>
+            </main>
         </div>
     );
 }

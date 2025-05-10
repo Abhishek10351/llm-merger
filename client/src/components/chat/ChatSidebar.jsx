@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { History } from "@/components/chat";
+import { ChatHistory } from "@/components/ui";
 import { useRouter } from "next/navigation";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon, Bars3Icon } from "@heroicons/react/20/solid";
@@ -49,7 +49,7 @@ export default function Sidebar() {
                             </button>
                         </div>
                         <div className="flex-grow overflow-y-auto">
-                            <History />
+                            <ChatHistory />
                         </div>
                     </>
                 )}

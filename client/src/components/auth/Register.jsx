@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 
 export default function Register() {
     const router = useRouter();
-    const [name, setName] = useState("User");
-    const [email, setEmail] = useState("test@gmail.com");
-    const [password, setPassword] = useState("123");
-    const [confirmPassword, setConfirmPassword] = useState("123");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState(null);
 
     const handleSubmit = (e) => {

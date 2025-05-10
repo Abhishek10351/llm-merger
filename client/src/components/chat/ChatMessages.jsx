@@ -96,7 +96,7 @@ const components_style = {
 
 export default function ChatMessages({ messages, selectedLlm }) {
     return (
-        <div className="h- overflow-y-scroll border rounded p-4 bg-gray-5 bg-purple-300">
+        <div className="h-auto overflow-y-scroll border rounded p-4 bg-purple-300 flex-grow">
             <div className="mb-2 flex flex-col">
                 {messages.map((message, index) => (
                     <div key={index} className="flex flex-col">

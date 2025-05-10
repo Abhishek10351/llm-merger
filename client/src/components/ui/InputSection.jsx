@@ -3,8 +3,11 @@ import { faSpinner, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 export default function InputSection({ value, onChange, onSubmit, loading }) {
     return (
-        <div className="sticky bottom-0 bg-gray-100 p-4 border-t">
-            <form onSubmit={onSubmit} className="flex items-center h-12">
+        <div className="sticky bottom-0 p-2 sm:p-4 border-t bg-gray-100 w-full">
+            <form
+                onSubmit={onSubmit}
+                className="flex items-center h-10 sm:h-12"
+            >
                 <input
                     type="text"
                     value={value}
@@ -19,7 +22,7 @@ export default function InputSection({ value, onChange, onSubmit, loading }) {
                         loading
                             ? "bg-gray-400 cursor-not-allowed"
                             : "bg-blue-500 hover:bg-blue-700"
-                    } text-white font-bold px-4 rounded-r focus:outline-none flex items-center justify-center h-full transition duration-200 cursor-pointer ${
+                    } text-white font-bold px-2 sm:px-4 rounded-r focus:outline-none flex items-center justify-center h-full transition duration-200 cursor-pointer ${
                         value.trim() ? "" : "hidden"
                     }`}
                 >
