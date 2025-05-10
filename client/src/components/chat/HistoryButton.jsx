@@ -30,29 +30,30 @@ export default function HistoryButton({ id, title, onDelete }) {
             onClick={handleClick}
         >
             <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold">{title}</span>
+                <span
+                    className="text-sm font-semibold truncate max-w-[150px]"
+                    title={title}
+                >
+                    {title}
+                </span>
                 <Menu as="div" className="relative">
                     <MenuButton
                         className="text-gray-700 cursor-pointer hover:text-gray-900 focus:outline-none border-1 outline-none hover:border-current rounded-full p-1 transition duration-200 ease-in-out hover:bg-gray-300"
                         title="More Options"
+                        onClick={(e) => e.stopPropagation()}
                     >
                         <EllipsisVerticalIcon className="h-5 w-5" />
                     </MenuButton>
-                    <MenuItems
-                        className="absolute right-0 mt-2 ml-4 w-24 bg-white border rounded shadow-lg z-10 focus:outline-none"
-                        anchor={"right"}
-                    >
+                    <MenuItems className="absolute right-0 mt-2 w-24 bg-white border rounded shadow-lg z-10 focus:outline-none">
                         <MenuItem>
-                            <button
-                                className={
-                                    "block w-full text-left px-2 py-2 text-sm hover:bg-gray-200 rounded transition duration-200 ease-in-out cursor-pointer text-red-600"
-                                }
-                                title="Delete Chat"
-                                onClick={handleDelete}
-                            >
-                                <TrashIcon className="h-5 w-5 mr-2 mb-1 inline" />
-                                <span>Delete</span>
-                            </button>
+                                <button
+                                    className={"block w-full text-left px-2 py-2 text-sm bg-gray-100 text-red-600 hover:bg-gray-200 rounded cursor-pointer"}
+                                    title="Delete Chat"
+                                    onClick={handleDelete}
+                                >
+                                    <TrashIcon className="h-5 w-5 mr-2 mb-1 inline" />
+                                    <span>Delete</span>
+                                </button>
                         </MenuItem>
                     </MenuItems>
                 </Menu>
