@@ -22,7 +22,7 @@ export default function Sidebar() {
         <aside
             className={`${
                 isSidebarOpen ? "w-64" : "w-16"
-            } bg-white shadow-md border-r transition-all duration-300 max-h-[calc(100vh-100px)] overflow-hidden`}
+            } bg-white shadow-md border-r transition-all duration-300 h-full overflow-hidden`}
         >
             <div className="p-4 border-b flex items-center justify-between">
                 <button

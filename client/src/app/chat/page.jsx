@@ -48,7 +48,7 @@ export default function ChatHomePage() {
     };
 
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-row h-[calc(100vh-64px)] overflow-hidden">
             {/* ChatSidebar */}
             <ChatSidebar />
 
@@ -58,7 +58,7 @@ export default function ChatHomePage() {
                     <h1 className="text-2xl font-bold mb-4 text-center text-slate-500">
                         Start a New Conversation
                     </h1>
-                        <ChatMessagesSection messages={messages} />
+                    <ChatMessagesSection messages={messages} />
                     <ChatInputSection
                         input={input}
                         setInput={setInput}
