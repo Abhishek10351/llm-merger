@@ -17,4 +17,3 @@ else:
     gemini_model = init_chat_model(
         "gemini-2.0-flash", model_provider="google_genai", api_key=GEMINI_API_KEY
     )
-    print("Gemini model loaded successfully")

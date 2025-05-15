@@ -7,6 +7,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     gemini_content = serializers.CharField(read_only=True)
     deepseek_content = serializers.CharField(read_only=True)
+    merged_content = serializers.CharField(read_only=True)
 
     class Meta:
         model = Message
@@ -15,6 +16,7 @@ class MessageSerializer(serializers.ModelSerializer):
             "user_content",
             "gemini_content",
             "deepseek_content",
+            "merged_content",
             "conversation",
         ]
 
@@ -27,6 +29,7 @@ class MessageContentSerializer(serializers.ModelSerializer):
             "user_content",
             "gemini_content",
             "deepseek_content",
+            "merged_content",
         ]
 
 

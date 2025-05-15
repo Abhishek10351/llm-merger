@@ -15,9 +15,8 @@ class Message(models.Model):
     user_content = models.TextField()
     gemini_content = models.TextField()
     deepseek_content = models.TextField(null=True, blank=True)
+    merged_content = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     conversation = models.ForeignKey(
         Conversation, related_name="messages", on_delete=models.CASCADE
     )
-
-

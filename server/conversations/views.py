@@ -12,7 +12,7 @@ from .serializers import (
     NewConversationSerializer,
 )
 
-from llm_core.utils import generate_title
+from llm_core.utils import generate_title, generate_response, merge_all_responses
 
 from llm_core import deepseek_model, gemini_model
 
@@ -104,30 +104,21 @@ class MessageViewSet(viewsets.ModelViewSet):
                 )
             messages = list(Message.objects.filter(conversation=conversation))
 
-            gemini_chat = []
-            for msg in messages:
-                if msg.user_content:
-                    gemini_chat.append(HumanMessage(msg.user_content))
-                if msg.gemini_content:
-                    gemini_chat.append(AIMessage(msg.gemini_content))
-            gemini_chat.append(HumanMessage(data["user_content"]))
-            response = gemini_model.invoke(gemini_chat)
-            gemini_message = response.content
-            deepseek_chat = []
-            for msg in messages:
-                if msg.user_content:
-                    deepseek_chat.append(HumanMessage(msg.user_content))
-                if msg.gemini_content:
-                    deepseek_chat.append(AIMessage(msg.deepseek_content))
-            deepseek_chat.append(AIMessage(data["user_content"]))
-            response = deepseek_model.invoke(deepseek_chat)
-            deepseek_message = response.content
+            gemini_response = generate_response(
+                messages, data["user_content"], model_provider="gemini"
+            )
+
+            deepseek_response = generate_response(
+                messages, data["user_content"], model_provider="deepseek"
+            )
+            final_res = merge_all_responses(messages, data["user_content"])
 
             ai_message_obj = Message.objects.create(
                 conversation=conversation,
                 user_content=data["user_content"],
-                gemini_content=gemini_message,
-                deepseek_content=deepseek_message,
+                gemini_content=gemini_response,
+                deepseek_content=deepseek_response,
+                merged_content=final_res,
             )
             headers = self.get_success_headers(serializer.data)
             return Response(MessageSerializer(ai_message_obj).data, status=201)
