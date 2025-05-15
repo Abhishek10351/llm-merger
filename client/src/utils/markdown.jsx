@@ -5,6 +5,10 @@ import {
     ClipboardDocumentCheckIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import "katex/dist/katex.min.css";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+
 const components_style = {
     ul: ({ children }) => (
         <ul className="list-none pl-8 mb-4 text-gray-200">{children}</ul>
@@ -110,6 +114,11 @@ const components_style = {
     td: ({ children }) => (
         <td className="px-4 py-2 border border-gray-700">{children}</td>
     ),
+};
+
+export const markdownPlugins = {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex],
 };
 
 export default components_style;

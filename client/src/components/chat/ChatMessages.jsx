@@ -2,7 +2,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { markdownStyle } from "@/utils";
+import { markdownStyle, markdownPlugins } from "@/utils";
 
 export default function ChatMessages({ messages, selectedLlm }) {
     return (
@@ -17,7 +17,8 @@ export default function ChatMessages({ messages, selectedLlm }) {
                             <div className="relative px-4 py-2 mb-2 rounded-lg self-start bg-gray-600 w-[800px] text-white">
                                 <ReactMarkdown
                                     components={markdownStyle}
-                                    remarkPlugins={[remarkGfm]}
+                                    remarkPlugins={[remarkGfm, ...(markdownPlugins.remarkPlugins || [])]}
+                                    rehypePlugins={markdownPlugins.rehypePlugins || []}
                                 >
                                     {message[selectedLlm]}
                                 </ReactMarkdown>
