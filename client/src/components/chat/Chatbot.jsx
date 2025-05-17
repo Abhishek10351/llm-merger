@@ -6,7 +6,7 @@ import { ModelSelector } from "@/components/ui";
 import ChatMessagesSection from "./ChatMessagesSection";
 import ChatInputSection from "./ChatInputSection";
 
-export default function Chatbot({ chat_id, blank_chat = false }) {
+export default function Chatbot({ chat_id }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
@@ -62,6 +62,11 @@ export default function Chatbot({ chat_id, blank_chat = false }) {
             })
             .catch((error) => {
                 setLoading(false);
+                setMessages((prevMessages) => {
+                    const updatedMessages = [...prevMessages];
+                    updatedMessages.pop();
+                    return updatedMessages;
+                });
                 console.error("Error sending message:", error);
             });
 
