@@ -94,24 +94,44 @@ class MessageViewSet(viewsets.ModelViewSet):
             conversation_id = data.get("conversation", None)
             if not conversation_id:
                 return Response({"error": "Conversation ID is required."}, status=400)
-            conversation = Conversation.objects.get(id=conversation_id, user=user)
-            if not conversation:
+
+            try:
+                conversation = Conversation.objects.get(id=conversation_id, user=user)
+            except Conversation.DoesNotExist:
                 return Response(
                     {
-                        "error": "You do not have permission to access this conversation."
+                        "error": "Conversation not found or you don't have permission to access it."
                     },
-                    status=403,
+                    status=404,
                 )
             messages = list(Message.objects.filter(conversation=conversation))
 
-            gemini_response = generate_response(
-                messages, data["user_content"], model_provider="gemini"
-            )
+            try:
+                gemini_response = generate_response(
+                    messages, data["user_content"], model_provider="gemini"
+                )
+            except Exception as e:
+                return Response(
+                    {"error": f"Failed to generate Gemini response: {str(e)}"},
+                    status=500,
+                )
 
-            deepseek_response = generate_response(
-                messages, data["user_content"], model_provider="deepseek"
-            )
-            final_res = merge_all_responses(messages, data["user_content"])
+            try:
+                deepseek_response = generate_response(
+                    messages, data["user_content"], model_provider="deepseek"
+                )
+            except Exception as e:
+                return Response(
+                    {"error": f"Failed to generate DeepSeek response: {str(e)}"},
+                    status=500,
+                )
+
+            try:
+                final_res = merge_all_responses(messages, data["user_content"])
+            except Exception as e:
+                return Response(
+                    {"error": f"Failed to merge responses: {str(e)}"}, status=500
+                )
 
             ai_message_obj = Message.objects.create(
                 conversation=conversation,
@@ -126,7 +146,11 @@ class MessageViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=400)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        message = Message.objects.get(id=pk)
+        try:
+            message = Message.objects.get(id=pk)
+        except Message.DoesNotExist:
+            return Response({"error": "Message not found."}, status=404)
+
         if message.conversation.user != request.user:
             return Response(
                 {"error": "You do not have permission to access this message."},
@@ -144,24 +168,54 @@ class NewConversation(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = request.user
-            title = generate_title(serializer.data["user_content"])
-            ai_message = gemini_model.invoke(serializer.data["user_content"])
-            deepseek_content = deepseek_model.invoke(serializer.data["user_content"])
+
+            try:
+                title = generate_title(serializer.data["user_content"])
+            except Exception as e:
+                title = "New Conversation"
+
+            try:
+                ai_message = gemini_model.invoke(serializer.data["user_content"])
+            except Exception as e:
+                return Response(
+                    {"error": f"Failed to generate Gemini response: {str(e)}"},
+                    status=500,
+                )
+
+            try:
+                deepseek_content = deepseek_model.invoke(
+                    serializer.data["user_content"]
+                )
+            except Exception as e:
+                return Response(
+                    {"error": f"Failed to generate DeepSeek response: {str(e)}"},
+                    status=500,
+                )
+
             conversation = Conversation.objects.create(
                 user=user,
                 title=title,
             )
             conversation.save()
-            merged_response = gemini_model.invoke(serializer.data["user_content"])
+
+            try:
+                # Use the merge function instead of just gemini response
+                merged_response = merge_all_responses(
+                    [], serializer.data["user_content"]
+                )
+            except Exception as e:
+                # Fallback to gemini response if merge fails
+                merged_response = ai_message.content
+
             message = Message.objects.create(
                 conversation=conversation,
                 user_content=serializer.data["user_content"],
                 gemini_content=ai_message.content,
                 deepseek_content=deepseek_content.content,
-                merged_content = merged_response
+                merged_content=merged_response,
             )
             message.save()
-            # properly serialize data before  returning it
-            new_serializer = ConversationSerializer(conversation)
-            new_serializer.data["messages"] = [MessageSerializer(message).data]
-            return Response(new_serializer.data, status=201)
+            # properly serialize data before returning it
+            conversation_data = ConversationSerializer(conversation).data
+            conversation_data["messages"] = [MessageSerializer(message).data]
+            return Response(conversation_data, status=201)

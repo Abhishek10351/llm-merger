@@ -23,12 +23,19 @@ def generate_response(messages: list[Message], user_prompt, model_provider="deep
     for index, msg in enumerate(messages):
         if msg.user_content:
             chat.append(HumanMessage(msg.user_content))
-        if model_provider == "gemini":
-            ai = msg.gemini_content
-        elif model_provider == "deepseek":
-            ai = msg.deepseek_content
 
-        chat.append(AIMessage(ai))
+        # Get AI content based on model provider
+        if model_provider == "gemini":
+            ai_content = msg.gemini_content
+        elif model_provider == "deepseek":
+            ai_content = msg.deepseek_content
+        else:
+            ai_content = None
+
+        # Only add AI message if content exists
+        if ai_content:
+            chat.append(AIMessage(ai_content))
+
     chat.append(HumanMessage(user_prompt))
 
     response = model.invoke(chat)
