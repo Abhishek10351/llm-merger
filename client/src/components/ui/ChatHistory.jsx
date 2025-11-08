@@ -13,20 +13,28 @@ export default function History() {
 
     return (
         <div className="h-full flex flex-col">
-            <div className="px-4 py-2 border-b">
-                <h1 className="text-lg font-semibold text-gray-900">History</h1>
+            <div className="px-4 py-3 border-b bg-gray-50/50">
+                <h2 className="text-sm font-medium text-gray-900">History</h2>
             </div>
             <div className="flex-grow overflow-y-auto p-2">
-                <div className="flex flex-col space-y-1">
-                    {conversations.map((message) => (
-                        <HistoryButton
-                            key={message.id}
-                            id={message.id}
-                            title={message.title}
-                            onDelete={handleDelete}
-                        />
-                    ))}
-                </div>
+                {conversations.length === 0 ? (
+                    <div className="flex items-center justify-center h-32 text-center">
+                        <p className="text-sm text-gray-500">
+                            No conversations yet
+                        </p>
+                    </div>
+                ) : (
+                    <div className="flex flex-col space-y-1">
+                        {conversations.map((message) => (
+                            <HistoryButton
+                                key={message.id}
+                                id={message.id}
+                                title={message.title}
+                                onDelete={handleDelete}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

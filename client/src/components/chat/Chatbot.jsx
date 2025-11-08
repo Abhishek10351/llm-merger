@@ -94,9 +94,13 @@ export default function Chatbot({ chat_id }) {
             <div className="flex-grow min-h-0">
                 {loading && messages.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
-                        <div className="text-center text-muted-foreground">
-                            <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2"></div>
-                            Loading conversation...
+                        <div className="text-center">
+                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <div className="animate-spin h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                            </div>
+                            <p className="text-sm text-gray-600">
+                                Loading conversation...
+                            </p>
                         </div>
                     </div>
                 ) : (

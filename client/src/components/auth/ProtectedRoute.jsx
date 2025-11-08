@@ -60,8 +60,20 @@ export default function ProtectedRoute({ children }) {
     // Show loading while checking auth
     if (!authChecked) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="text-gray-600">Loading...</div>
+            <div className="flex items-center justify-center min-h-screen bg-gray-50">
+                <div className="text-center space-y-4">
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                        <div className="animate-spin h-8 w-8 border-3 border-blue-600 border-t-transparent rounded-full"></div>
+                    </div>
+                    <div>
+                        <h2 className="text-lg font-semibold text-gray-900">
+                            LLM Merger
+                        </h2>
+                        <p className="text-sm text-gray-600">
+                            Loading application...
+                        </p>
+                    </div>
+                </div>
             </div>
         );
     }

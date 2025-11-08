@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Menu, MenuItems, MenuItem, MenuButton } from "@headlessui/react";
-import { TrashIcon, EllipsisVerticalIcon } from "@heroicons/react/20/solid";
+import { Trash2, MoreHorizontal, MessageCircle } from "lucide-react";
 import { api } from "@/utils";
 import { Button } from "@/components/ui/button";
 
@@ -27,38 +27,41 @@ export default function HistoryButton({ id, title, onDelete }) {
     return (
         <div
             key={id}
-            className="mb-2 p-2 bg-gray-100 text-gray-900 rounded-md hover:bg-gray-200 cursor-pointer transition-colors border"
+            className="group p-2 bg-white hover:bg-gray-50 text-gray-900 rounded-lg cursor-pointer transition-all duration-200 border border-gray-100 hover:border-gray-200 hover:shadow-sm"
             onClick={handleClick}
         >
-            <div className="flex items-center justify-between">
-                <span
-                    className="text-sm font-medium truncate max-w-[150px] text-gray-900"
-                    title={title}
-                >
-                    {title}
-                </span>
+            <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <MessageCircle className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+                    <span
+                        className="text-sm text-gray-700 truncate"
+                        title={title}
+                    >
+                        {title}
+                    </span>
+                </div>
                 <Menu as="div" className="relative">
                     <MenuButton asChild>
                         <Button
                             variant="ghost"
-                            size="icon-sm"
-                            className="h-6 w-6 hover:bg-secondary/50"
+                            size="icon"
+                            className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-100"
                             title="More Options"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <EllipsisVerticalIcon className="h-4 w-4" />
+                            <MoreHorizontal className="h-3.5 w-3.5" />
                         </Button>
                     </MenuButton>
-                    <MenuItems className="absolute right-0 mt-2 w-36 bg-background border rounded-md shadow-lg z-10 focus:outline-none">
+                    <MenuItems className="absolute right-0 mt-1 w-32 bg-white border rounded-lg shadow-lg z-50 focus:outline-none py-1">
                         <MenuItem>
                             <Button
-                                variant="destructive"
+                                variant="ghost"
                                 size="sm"
-                                className="w-full justify-start"
+                                className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
                                 title="Delete Chat"
                                 onClick={handleDelete}
                             >
-                                <TrashIcon className="h-4 w-4 mr-2" />
+                                <Trash2 className="h-3.5 w-3.5 mr-2" />
                                 Delete
                             </Button>
                         </MenuItem>

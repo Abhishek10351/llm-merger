@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { Loader2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,14 +8,15 @@ export default function InputSection({ value, onChange, onSubmit, loading }) {
 
     return (
         <div className="w-full">
-            <form onSubmit={onSubmit} className="flex items-end gap-2">
+            <form onSubmit={onSubmit} className="flex items-end gap-2 sm:gap-3">
                 {isMultiline ? (
                     <Textarea
                         value={value}
                         onChange={onChange}
                         placeholder="Ask me anything..."
-                        className="flex-grow resize-none"
+                        className="flex-grow resize-none min-h-[2.5rem]"
                         rows={3}
+                        maxLength={2000}
                     />
                 ) : (
                     <Input
@@ -25,24 +25,19 @@ export default function InputSection({ value, onChange, onSubmit, loading }) {
                         onChange={onChange}
                         placeholder="Ask me anything..."
                         className="flex-grow"
+                        maxLength={500}
                     />
                 )}
                 <Button
                     type="submit"
                     disabled={loading || !value.trim()}
                     size="icon"
+                    className="shrink-0"
                 >
                     {loading ? (
-                        <FontAwesomeIcon
-                            icon={faSpinner}
-                            spin
-                            className="h-4 w-4"
-                        />
+                        <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                        <FontAwesomeIcon
-                            icon={faPaperPlane}
-                            className="h-4 w-4"
-                        />
+                        <Send className="h-4 w-4" />
                     )}
                 </Button>
             </form>
