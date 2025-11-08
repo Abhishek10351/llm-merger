@@ -3,6 +3,8 @@
 import {
     Select,
     SelectContent,
+    SelectGroup,
+    SelectLabel,
     SelectItem,
     SelectTrigger,
     SelectValue,
@@ -16,17 +18,23 @@ export default function LLMSelect({ onChange, value }) {
     ];
 
     return (
-        <div className="w-48 px-4">
+        <div className="flex items-center gap-2 sm:gap-3">
             <Select value={value} onValueChange={onChange}>
-                <SelectTrigger className="mt-3">
-                    <SelectValue placeholder="Select model response" />
+                <SelectTrigger
+                    size="sm"
+                    className="w-auto min-w-[120px] sm:min-w-[140px]"
+                >
+                    <SelectValue placeholder="Select model" />
                 </SelectTrigger>
-                <SelectContent>
-                    {options.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                        </SelectItem>
-                    ))}
+                <SelectContent align="end">
+                    <SelectGroup>
+                        <SelectLabel>Choose a model</SelectLabel>
+                        {options.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                            </SelectItem>
+                        ))}
+                    </SelectGroup>
                 </SelectContent>
             </Select>
         </div>

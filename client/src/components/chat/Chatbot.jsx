@@ -81,7 +81,7 @@ export default function Chatbot({ chat_id }) {
     return (
         <Card className="flex flex-col h-full overflow-hidden p-0">
             {/* Header with model selector */}
-            <div className="border-b p-4 bg-gray-50">
+            <div className="border-b px-4 py-3 bg-gray-50">
                 <ModelSelector onChange={setSelectedLlm} value={selectedLlm} />
                 {error && (
                     <div className="mt-2 text-sm text-red-600 bg-red-50 px-3 py-2 rounded">
