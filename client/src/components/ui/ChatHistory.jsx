@@ -12,22 +12,20 @@ export default function History() {
     };
 
     return (
-        <div className="flex flex-col bg-background">
-            <div className="w-full">
-                <div className="overflow-y-auto p-4">
-                    <h1 className="text-lg font-semibold mb-3 text-gray-900">
-                        History
-                    </h1>
-                    <div className="flex flex-col space-y-2">
-                        {conversations.map((message) => (
-                            <HistoryButton
-                                key={message.id}
-                                id={message.id}
-                                title={message.title}
-                                onDelete={handleDelete}
-                            />
-                        ))}
-                    </div>
+        <div className="h-full flex flex-col">
+            <div className="px-4 py-2 border-b">
+                <h1 className="text-lg font-semibold text-gray-900">History</h1>
+            </div>
+            <div className="flex-grow overflow-y-auto p-2">
+                <div className="flex flex-col space-y-1">
+                    {conversations.map((message) => (
+                        <HistoryButton
+                            key={message.id}
+                            id={message.id}
+                            title={message.title}
+                            onDelete={handleDelete}
+                        />
+                    ))}
                 </div>
             </div>
         </div>

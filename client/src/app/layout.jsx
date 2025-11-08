@@ -22,13 +22,10 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
             >
                 <ReduxProvider>
-                    <ProtectedRoute>
-                        <Navbar />
-                        {children}
-                    </ProtectedRoute>
+                    <ProtectedRoute>{children}</ProtectedRoute>
                 </ReduxProvider>
             </body>
         </html>

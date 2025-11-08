@@ -8,7 +8,7 @@ import { XMarkIcon, Bars3Icon } from "@heroicons/react/20/solid";
 import { Button } from "@/components/ui/button";
 
 export default function Sidebar() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const router = useRouter();
 
     const toggleSidebar = () => {
@@ -23,36 +23,40 @@ export default function Sidebar() {
         <aside
             className={`${
                 isSidebarOpen ? "w-64" : "w-16"
-            } bg-white shadow-sm border-r border-gray-200 transition-all duration-300 h-full overflow-hidden`}
+            } bg-white shadow-sm border-r border-gray-200 transition-all duration-300 h-full flex flex-col overflow-hidden shrink-0`}
         >
-            <div className="p-4 border-b flex items-center justify-between">
+            {/* Header with toggle */}
+            <div className="p-3 border-b flex items-center justify-between min-h-[3.5rem]">
                 <Button variant="ghost" size="icon" onClick={toggleSidebar}>
                     {isSidebarOpen ? (
-                        <XMarkIcon className="h-6 w-6" />
+                        <XMarkIcon className="h-5 w-5" />
                     ) : (
-                        <Bars3Icon className="h-6 w-6" />
+                        <Bars3Icon className="h-5 w-5" />
                     )}
                 </Button>
             </div>
-            <div className="h-full flex flex-col">
-                {isSidebarOpen && (
-                    <>
-                        <div className="p-4 border-t">
-                            <Button
-                                onClick={handleNewChat}
-                                variant="default"
-                                className="w-full"
-                            >
-                                <PencilSquareIcon className="h-5 w-5 mr-2" />
-                                New Chat
-                            </Button>
-                        </div>
-                        <div className="flex-grow overflow-y-auto">
-                            <ChatHistory />
-                        </div>
-                    </>
-                )}
-            </div>
+
+            {/* Content */}
+            {isSidebarOpen && (
+                <>
+                    {/* New Chat Button */}
+                    <div className="p-4">
+                        <Button
+                            onClick={handleNewChat}
+                            variant="default"
+                            className="w-full"
+                        >
+                            <PencilSquareIcon className="h-4 w-4 mr-2" />
+                            New Chat
+                        </Button>
+                    </div>
+
+                    {/* Chat History */}
+                    <div className="flex-grow overflow-hidden">
+                        <ChatHistory />
+                    </div>
+                </>
+            )}
         </aside>
     );
 }

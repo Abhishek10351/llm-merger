@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { api } from "@/utils";
 import { useDispatch } from "react-redux";
 import { addConversation } from "@/store/historySlice";
-import ChatMessagesSection from "@/components/chat/ChatMessagesSection";
-import ChatInputSection from "@/components/chat/ChatInputSection";
+import ChatMessages from "@/components/chat/ChatMessages";
 import { ChatSidebar } from "@/components/chat";
+import { ChatInput } from "@/components/ui";
 
 export default function ChatHomePage() {
     const dispatch = useDispatch();
@@ -48,28 +48,39 @@ export default function ChatHomePage() {
     };
 
     return (
-        <div className="flex flex-row h-[calc(100vh-64px)] overflow-hidden">
+        <div className="flex flex-row h-full overflow-hidden">
             {/* ChatSidebar */}
             <ChatSidebar />
 
             {/* Main Content */}
-            <main className="flex-grow flex flex-col items-center bg-gray-50">
-                <div className="bg-white w-full border rounded-md shadow-sm p-6 mt-4 mx-4 flex-grow overflow-y-auto flex flex-col">
-                    <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">
-                        Start a New Conversation
-                    </h1>
-                    <ChatMessagesSection messages={messages} />
-                    <ChatInputSection
-                        input={input}
-                        setInput={setInput}
-                        handleSendMessage={handleSendMessage}
-                        loading={loading}
-                    />
-                    {error && (
-                        <p className="mt-4 text-red-600 text-sm text-center">
-                            {error}
-                        </p>
-                    )}
+            <main className="flex-grow flex flex-col bg-gray-50 p-2 sm:p-4">
+                <div className="bg-white border rounded-lg shadow-sm h-full flex flex-col overflow-hidden">
+                    {/* Header */}
+                    <div className="border-b p-4 bg-gray-50 rounded-t-lg">
+                        <h1 className="text-xl font-semibold text-center text-gray-900">
+                            Start a New Conversation
+                        </h1>
+                        {error && (
+                            <p className="mt-2 text-red-600 text-sm text-center">
+                                {error}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Messages Area */}
+                    <div className="flex-grow min-h-0">
+                        <ChatMessages messages={messages} />
+                    </div>
+
+                    {/* Input Area */}
+                    <div className="border-t p-4 bg-white">
+                        <ChatInput
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onSubmit={handleSendMessage}
+                            loading={loading}
+                        />
+                    </div>
                 </div>
             </main>
         </div>

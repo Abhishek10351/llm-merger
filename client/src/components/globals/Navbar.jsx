@@ -1,25 +1,25 @@
 "use client";
-import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { logout } from "@/store/authSlice";
 
 export default function Navbar() {
     const { isLoggedIn, user } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
     const router = useRouter();
 
     const handleLogout = () => {
+        dispatch(logout());
         router.push("/auth/login");
     };
-
-    const name = "Abhishek";
 
     // Generate Dicebear avatar URL
     const dicebearUrl = `https://api.dicebear.com/9.x/fun-emoji/png/?size=40&backgroundColor=%23f0f0f0`;
 
     return (
-        <nav className="flex items-center justify-between bg-white border-b shadow-sm p-4">
+        <nav className="flex items-center justify-between bg-white border-b shadow-sm px-4 py-3 h-16">
             <div className="flex items-center space-x-4">
                 <Image
                     src={dicebearUrl}
@@ -32,7 +32,9 @@ export default function Navbar() {
             </div>
             {isLoggedIn ? (
                 <div className="flex items-center space-x-4">
-                    <span className="text-gray-700 font-medium">{name}</span>
+                    <span className="text-gray-700 font-medium">
+                        {user?.first_name || "User"}
+                    </span>
                     <Button
                         onClick={handleLogout}
                         variant="destructive"

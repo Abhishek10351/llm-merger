@@ -8,7 +8,7 @@ export default function InputSection({ value, onChange, onSubmit, loading }) {
     const isMultiline = value.length > 100;
 
     return (
-        <div className="sticky bottom-0 p-2 sm:p-4 border-t bg-background w-full">
+        <div className="w-full">
             <form onSubmit={onSubmit} className="flex items-end gap-2">
                 {isMultiline ? (
                     <Textarea
