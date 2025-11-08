@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/utils";
-import { ModelSelector } from "@/components/ui";
-import ChatMessagesSection from "./ChatMessagesSection";
-import ChatInputSection from "./ChatInputSection";
+import { ModelSelector, ChatInput } from "@/components/ui";
+import ChatMessages from "./ChatMessages";
 import { Card } from "@/components/ui/card";
 
 export default function Chatbot({ chat_id }) {
@@ -34,68 +33,91 @@ export default function Chatbot({ chat_id }) {
     };
 
     useEffect(() => {
-        fetchChat();
+        if (chat_id) {
+            fetchChat();
+        }
     }, [chat_id]);
 
-    const handleSendMessage = (e) => {
+    const handleSendMessage = async (e) => {
         e.preventDefault();
 
         if (!input.trim()) return;
         setLoading(true);
+        setError(null);
 
         const newMessage = { user_content: input };
-
+        const currentInput = input;
+        setInput("");
         setMessages((prevMessages) => [...prevMessages, newMessage]);
+
         const data = {
             conversation: chat_id,
-            user_content: input,
+            user_content: currentInput,
         };
-        api.post("/messages/", data)
-            .then((response) => {
-                const message = response.data;
-                setMessages((prevMessages) => {
-                    const updatedMessages = [...prevMessages];
-                    updatedMessages.pop();
-                    updatedMessages.push(message);
-                    return updatedMessages;
-                });
-                setLoading(false);
-            })
-            .catch((error) => {
-                setLoading(false);
-                setMessages((prevMessages) => {
-                    const updatedMessages = [...prevMessages];
-                    updatedMessages.pop();
-                    return updatedMessages;
-                });
-                console.error("Error sending message:", error);
-            });
 
-        setInput("");
+        try {
+            const response = await api.post("/messages/", data);
+            const message = response.data;
+            setMessages((prevMessages) => {
+                const updatedMessages = [...prevMessages];
+                updatedMessages.pop();
+                updatedMessages.push(message);
+                return updatedMessages;
+            });
+        } catch (error) {
+            console.error("Error sending message:", error);
+            setError("Failed to send message. Please try again.");
+            setMessages((prevMessages) => {
+                const updatedMessages = [...prevMessages];
+                updatedMessages.pop();
+                return updatedMessages;
+            });
+            setInput(currentInput); // Restore input on error
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <Card className="flex flex-col h-full m-4 overflow-hidden bg-white">
-            <div className="border-b border-gray-200 p-4 bg-gray-50">
-                <ModelSelector
-                    onChange={setSelectedLlm}
-                    defaultValue={selectedLlm}
-                />
+        <Card className="flex flex-col h-full overflow-hidden p-0">
+            {/* Header with model selector */}
+            <div className="border-b p-4 bg-gray-50">
+                <ModelSelector onChange={setSelectedLlm} value={selectedLlm} />
+                {error && (
+                    <div className="mt-2 text-sm text-red-600 bg-red-50 px-3 py-2 rounded">
+                        {error}
+                    </div>
+                )}
             </div>
 
-            <div className="flex-grow overflow-hidden">
-                <ChatMessagesSection
-                    messages={messages}
-                    selectedLlm={selectedLlm}
-                />
+            {/* Messages area */}
+            <div className="flex-grow min-h-0">
+                {loading && messages.length === 0 ? (
+                    <div className="flex items-center justify-center h-full">
+                        <div className="text-center text-muted-foreground">
+                            <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2"></div>
+                            Loading conversation...
+                        </div>
+                    </div>
+                ) : (
+                    <div className="h-full">
+                        <ChatMessages
+                            messages={messages}
+                            selectedLlm={selectedLlm}
+                        />
+                    </div>
+                )}
             </div>
 
-            <ChatInputSection
-                input={input}
-                setInput={setInput}
-                handleSendMessage={handleSendMessage}
-                loading={loading}
-            />
+            {/* Input area */}
+            <div className="border-t p-4 bg-white">
+                <ChatInput
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onSubmit={handleSendMessage}
+                    loading={loading}
+                />
+            </div>
         </Card>
     );
 }
