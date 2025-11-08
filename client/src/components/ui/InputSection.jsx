@@ -1,52 +1,50 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function InputSection({ value, onChange, onSubmit, loading }) {
-    const isMultiline = value.length > 100; 
+    const isMultiline = value.length > 100;
 
     return (
-        <div className="sticky bottom-0 p-2 sm:p-4 border-t bg-gray-100 w-full">
-            <form onSubmit={onSubmit} className={`flex items-center ${isMultiline ? "h-24" : "h-full"}` }>
+        <div className="sticky bottom-0 p-2 sm:p-4 border-t bg-background w-full">
+            <form onSubmit={onSubmit} className="flex items-end gap-2">
                 {isMultiline ? (
-                    <textarea
+                    <Textarea
                         value={value}
                         onChange={onChange}
                         placeholder="Ask me anything..."
-                        className="flex-grow border rounded-l px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 h-24 resize-none"
+                        className="flex-grow resize-none"
+                        rows={3}
                     />
                 ) : (
-                    <input
+                    <Input
                         type="text"
                         value={value}
                         onChange={onChange}
                         placeholder="Ask me anything..."
-                        className="flex-grow border rounded-l px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 h-full"
+                        className="flex-grow"
                     />
                 )}
-                <button
+                <Button
                     type="submit"
-                    disabled={loading}
-                    className={`${
-                        loading
-                            ? "bg-gray-400 cursor-not-allowed"
-                            : "bg-blue-500 hover:bg-blue-700"
-                    } text-white font-bold px-2 sm:px-4 rounded-r focus:outline-none flex items-center justify-center transition duration-200 cursor-pointer ${
-                        value.trim() ? "" : "hidden"
-                    } ${isMultiline ? "h-16 py-2" : "h-full py-4"}`}
+                    disabled={loading || !value.trim()}
+                    size="icon"
                 >
                     {loading ? (
                         <FontAwesomeIcon
                             icon={faSpinner}
                             spin
-                            className="text-white"
+                            className="h-4 w-4"
                         />
                     ) : (
                         <FontAwesomeIcon
                             icon={faPaperPlane}
-                            className="text-white"
+                            className="h-4 w-4"
                         />
                     )}
-                </button>
+                </Button>
             </form>
         </div>
     );

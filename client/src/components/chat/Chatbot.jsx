@@ -5,6 +5,7 @@ import { api } from "@/utils";
 import { ModelSelector } from "@/components/ui";
 import ChatMessagesSection from "./ChatMessagesSection";
 import ChatInputSection from "./ChatInputSection";
+import { Card } from "@/components/ui/card";
 
 export default function Chatbot({ chat_id }) {
     const [messages, setMessages] = useState([]);
@@ -74,16 +75,20 @@ export default function Chatbot({ chat_id }) {
     };
 
     return (
-        <div className="flex flex-col h-full">
-            <ModelSelector
-                onChange={setSelectedLlm}
-                defaultValue={selectedLlm}
-            />
+        <Card className="flex flex-col h-full m-4 overflow-hidden bg-white">
+            <div className="border-b border-gray-200 p-4 bg-gray-50">
+                <ModelSelector
+                    onChange={setSelectedLlm}
+                    defaultValue={selectedLlm}
+                />
+            </div>
 
-            <ChatMessagesSection
-                messages={messages}
-                selectedLlm={selectedLlm}
-            />
+            <div className="flex-grow overflow-hidden">
+                <ChatMessagesSection
+                    messages={messages}
+                    selectedLlm={selectedLlm}
+                />
+            </div>
 
             <ChatInputSection
                 input={input}
@@ -91,6 +96,6 @@ export default function Chatbot({ chat_id }) {
                 handleSendMessage={handleSendMessage}
                 loading={loading}
             />
-        </div>
+        </Card>
     );
 }

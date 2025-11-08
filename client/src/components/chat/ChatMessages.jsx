@@ -6,22 +6,30 @@ import { markdownStyle, markdownPlugins } from "@/utils";
 
 export default function ChatMessages({ messages, selectedLlm }) {
     return (
-        <div className="h-auto overflow-y-scroll border rounded p-4 bg-purple-300 flex-grow">
-            <div className="mb-2 flex flex-col">
+        <div className="h-auto overflow-y-auto border rounded-md p-4 bg-white flex-grow">
+            <div className="mb-2 flex flex-col space-y-4">
                 {messages.map((message, index) => (
-                    <div key={index} className="flex flex-col">
-                        <div className="px-4 py-2 mb-2 rounded-lg self-end bg-blue-500 w-[400px] text-white">
-                            {message["user_content"]}
+                    <div key={index} className="flex flex-col space-y-2">
+                        <div className="px-4 py-2 rounded-lg self-end bg-blue-600 text-white max-w-[80%] md:max-w-[60%]">
+                            <p className="text-sm">{message["user_content"]}</p>
                         </div>
                         {message[selectedLlm] && (
-                            <div className="relative px-4 py-2 mb-2 rounded-lg self-start bg-gray-600 w-[800px] text-white">
-                                <ReactMarkdown
-                                    components={markdownStyle}
-                                    remarkPlugins={[remarkGfm, ...(markdownPlugins.remarkPlugins || [])]}
-                                    rehypePlugins={markdownPlugins.rehypePlugins || []}
-                                >
-                                    {message[selectedLlm]}
-                                </ReactMarkdown>
+                            <div className="px-4 py-3 rounded-lg self-start bg-white text-gray-900 border border-gray-200 shadow-sm max-w-[90%] md:max-w-[80%]">
+                                <div className="prose prose-sm max-w-none">
+                                    <ReactMarkdown
+                                        components={markdownStyle}
+                                        remarkPlugins={[
+                                            remarkGfm,
+                                            ...(markdownPlugins.remarkPlugins ||
+                                                []),
+                                        ]}
+                                        rehypePlugins={
+                                            markdownPlugins.rehypePlugins || []
+                                        }
+                                    >
+                                        {message[selectedLlm]}
+                                    </ReactMarkdown>
+                                </div>
                             </div>
                         )}
                     </div>

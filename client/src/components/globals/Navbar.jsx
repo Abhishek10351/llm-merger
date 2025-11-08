@@ -3,6 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
     const { isLoggedIn, user } = useSelector((state) => state.auth);
@@ -16,10 +17,9 @@ export default function Navbar() {
 
     // Generate Dicebear avatar URL
     const dicebearUrl = `https://api.dicebear.com/9.x/fun-emoji/png/?size=40&backgroundColor=%23f0f0f0`;
-    
 
     return (
-        <nav className="flex items-center justify-between bg-gray-800 p-4">
+        <nav className="flex items-center justify-between bg-white border-b shadow-sm p-4">
             <div className="flex items-center space-x-4">
                 <Image
                     src={dicebearUrl}
@@ -28,32 +28,35 @@ export default function Navbar() {
                     height={40}
                     className="rounded-full"
                 />
-                <h1 className="text-white text-xl font-bold">Chatbot</h1>
+                <h1 className="text-gray-900 text-xl font-bold">Chatbot</h1>
             </div>
             {isLoggedIn ? (
                 <div className="flex items-center space-x-4">
-                    <span className="text-white">{name}</span>
-                    <button
+                    <span className="text-gray-700 font-medium">{name}</span>
+                    <Button
                         onClick={handleLogout}
-                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer"
+                        variant="destructive"
+                        size="sm"
                     >
                         Logout
-                    </button>
+                    </Button>
                 </div>
             ) : (
                 <div className="flex items-center space-x-4">
-                    <button
+                    <Button
                         onClick={() => router.push("/auth/login")}
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer"
+                        variant="outline"
+                        size="sm"
                     >
                         Login
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         onClick={() => router.push("/auth/register")}
-                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer"
+                        variant="default"
+                        size="sm"
                     >
                         Sign Up
-                    </button>
+                    </Button>
                 </div>
             )}
         </nav>

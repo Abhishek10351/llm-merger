@@ -53,9 +53,9 @@ export default function ChatHomePage() {
             <ChatSidebar />
 
             {/* Main Content */}
-            <main className="flex-grow flex flex-col items-center bg-gray-100">
-                <div className="bg-white w-full rounded shadow-md p-4 mt-3 flex-grow overflow-y-auto flex flex-col">
-                    <h1 className="text-2xl font-bold mb-4 text-center text-slate-500">
+            <main className="flex-grow flex flex-col items-center bg-gray-50">
+                <div className="bg-white w-full border rounded-md shadow-sm p-6 mt-4 mx-4 flex-grow overflow-y-auto flex flex-col">
+                    <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">
                         Start a New Conversation
                     </h1>
                     <ChatMessagesSection messages={messages} />
@@ -66,7 +66,9 @@ export default function ChatHomePage() {
                         loading={loading}
                     />
                     {error && (
-                        <p className="mt-4 text-red-500 text-sm">{error}</p>
+                        <p className="mt-4 text-red-600 text-sm text-center">
+                            {error}
+                        </p>
                     )}
                 </div>
             </main>

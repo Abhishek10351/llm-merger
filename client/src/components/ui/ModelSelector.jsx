@@ -1,43 +1,34 @@
 "use client";
 
-import { Select } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import clsx from "clsx";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export default function LLMSelect({ onChange, defaultValue }) {
     const options = [
         { value: "gemini_content", label: "Gemini" },
         { value: "deepseek_content", label: "DeepSeek" },
-        { value: "merged_content", label: "Merged Response"}
+        { value: "merged_content", label: "Merged Response" },
     ];
+
     return (
-        <div className="w-48 max-w-m px-4">
-            <div className="relative">
-                <Select
-                    className={clsx(
-                        "mt-3 block w-full appearance-none rounded-lg border-none px-3 py-1.5 text-sm/6 bg-gray-200 text-slate-500",
-                        "focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25",
-                    )}
-                    value={defaultValue}
-                    onChange={(e) => {
-                        onChange(e.target.value);
-                    }}
-                >
+        <div className="w-48 px-4">
+            <Select value={defaultValue} onValueChange={onChange}>
+                <SelectTrigger className="mt-3">
+                    <SelectValue placeholder="Select model response" />
+                </SelectTrigger>
+                <SelectContent>
                     {options.map((option) => (
-                        <option
-                            key={option.value}
-                            value={option.value}
-                            className="text-black"
-                        >
+                        <SelectItem key={option.value} value={option.value}>
                             {option.label}
-                        </option>
+                        </SelectItem>
                     ))}
-                </Select>
-                <ChevronDownIcon
-                    className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-slate-500 transition-transform duration-200 ease-in-out"
-                    aria-hidden="true"
-                />
-            </div>
+                </SelectContent>
+            </Select>
         </div>
     );
 }

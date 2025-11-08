@@ -12,13 +12,13 @@ export default function History() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center bg-gray-100">
-            <div className="bg-white w-full max-w-md rounded shadow-md">
-                <div className="overflow-y-auto border rounded p-4 bg-gray-50 mt-3">
-                    <h1 className="text-lg font-bold mb-1 text-slate-500 pl-4">
+        <div className="flex flex-col bg-background">
+            <div className="w-full">
+                <div className="overflow-y-auto p-4">
+                    <h1 className="text-lg font-semibold mb-3 text-gray-900">
                         History
                     </h1>
-                    <div className="mb-2 flex flex-col">
+                    <div className="flex flex-col space-y-2">
                         {conversations.map((message) => (
                             <HistoryButton
                                 key={message.id}
