@@ -12,7 +12,7 @@ export default async function ChatPage({ params }) {
             {/* Main Chat Area */}
             <main className="flex-grow bg-white shadow-md flex flex-col">
                 <div className="flex-grow overflow-y-auto">
-                    <Chatbot chat_id={chatId} blank_chat={true} />
+                    <Chatbot chat_id={chatId} />
                 </div>
             </main>
         </div>

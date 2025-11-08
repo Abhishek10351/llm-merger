@@ -1,22 +1,21 @@
 "use client";
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function Navbar() {
     const { isLoggedIn, user } = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
     const router = useRouter();
 
     const handleLogout = () => {
         router.push("/auth/login");
     };
 
-    const name = user?.name || "Guest";
+    const name = "Abhishek";
 
     // Generate Dicebear avatar URL
-    const dicebearUrl = `https://api.dicebear.com/9.x/fun-emoji/png/?seed=${name}&size=40&backgroundColor=%23f0f0f0`;
+    const dicebearUrl = `https://api.dicebear.com/9.x/fun-emoji/png/?size=40&backgroundColor=%23f0f0f0`;
     
 
     return (

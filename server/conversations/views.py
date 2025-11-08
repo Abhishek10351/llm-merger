@@ -152,11 +152,13 @@ class NewConversation(generics.CreateAPIView):
                 title=title,
             )
             conversation.save()
+            merged_response = gemini_model.invoke(serializer.data["user_content"])
             message = Message.objects.create(
                 conversation=conversation,
                 user_content=serializer.data["user_content"],
                 gemini_content=ai_message.content,
                 deepseek_content=deepseek_content.content,
+                merged_content = merged_response
             )
             message.save()
             # properly serialize data before  returning it
