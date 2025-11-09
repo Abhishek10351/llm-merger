@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { api } from "@/utils";
-import { ModelSelector, ChatInput } from "@/components/ui";
+import { ModelSelector, ChatInput } from "@/components/input";
 import ChatMessages from "./ChatMessages";
 import { Card } from "@/components/ui/card";
 
@@ -79,12 +79,12 @@ export default function Chatbot({ chat_id }) {
     };
 
     return (
-        <Card className="flex flex-col h-full overflow-hidden p-0">
+        <Card className="flex flex-col h-full overflow-hidden p-0 border-0 sm:border rounded-none sm:rounded-lg shadow-none sm:shadow-sm">
             {/* Header with model selector */}
-            <div className="border-b border-border px-4 py-3 bg-muted">
+            <div className="border-b border-border px-2 sm:px-3 md:px-4 py-2 sm:py-3 bg-muted">
                 <ModelSelector onChange={setSelectedLlm} value={selectedLlm} />
                 {error && (
-                    <div className="mt-2 text-sm text-destructive bg-destructive/10 px-3 py-2 rounded">
+                    <div className="mt-2 text-xs sm:text-sm text-destructive bg-destructive/10 px-3 py-2 rounded">
                         {error}
                     </div>
                 )}
@@ -114,13 +114,15 @@ export default function Chatbot({ chat_id }) {
             </div>
 
             {/* Input area */}
-            <div className="border-t border-border p-4 bg-background">
-                <ChatInput
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onSubmit={handleSendMessage}
-                    loading={loading}
-                />
+            <div className="border-t border-border p-2 sm:p-3 md:p-4 bg-background">
+                <div className="max-w-4xl mx-auto px-2 sm:px-1 md:px-0">
+                    <ChatInput
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onSubmit={handleSendMessage}
+                        loading={loading}
+                    />
+                </div>
             </div>
         </Card>
     );

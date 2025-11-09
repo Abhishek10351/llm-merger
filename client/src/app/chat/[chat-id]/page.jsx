@@ -8,8 +8,8 @@ export default async function ChatPage({ params }) {
             <ChatSidebar />
 
             {/* Main Chat Area */}
-            <main className="flex-grow bg-muted flex flex-col p-2 sm:p-4">
-                <div className="h-full overflow-hidden">
+            <main className="flex-grow bg-muted flex flex-col p-0 sm:p-1 md:p-2 lg:p-4 min-w-0">
+                <div className="h-full overflow-hidden max-w-full sm:max-w-6xl mx-auto w-full">
                     <Chatbot chat_id={chatId} />
                 </div>
             </main>

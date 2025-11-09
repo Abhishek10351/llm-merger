@@ -9,7 +9,7 @@ export default function MainLayout({ children }) {
     // Auth pages get full-screen layout
     if (pathname?.startsWith('/auth')) {
         return (
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-muted">
                 {children}
             </div>
         );
@@ -17,9 +17,9 @@ export default function MainLayout({ children }) {
     
     // Regular pages get navbar + content
     return (
-        <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+        <div className="h-screen bg-muted flex flex-col overflow-hidden">
             <Navbar />
-            <main className="flex-grow overflow-hidden">
+            <main className="flex-grow overflow-hidden min-h-0">
                 {children}
             </main>
         </div>

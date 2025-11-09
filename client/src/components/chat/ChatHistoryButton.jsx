@@ -27,14 +27,14 @@ export default function HistoryButton({ id, title, onDelete }) {
     return (
         <div
             key={id}
-            className="group p-2 bg-card hover:bg-accent text-card-foreground rounded-lg cursor-pointer transition-all duration-200 border border-border hover:border-border/60 hover:shadow-sm"
+            className="group p-1.5 sm:p-2 bg-card hover:bg-accent text-card-foreground rounded-lg cursor-pointer transition-all duration-200 border border-border hover:border-border/60 hover:shadow-sm"
             onClick={handleClick}
         >
-            <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <MessageCircle className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+            <div className="flex items-center justify-between gap-1 sm:gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
+                    <MessageCircle className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted-foreground shrink-0" />
                     <span
-                        className="text-sm text-foreground truncate"
+                        className="text-xs sm:text-sm text-foreground truncate"
                         title={title}
                     >
                         {title}
@@ -45,11 +45,11 @@ export default function HistoryButton({ id, title, onDelete }) {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-accent"
+                            className="h-6 w-6 sm:h-7 sm:w-7 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-accent"
                             title="More Options"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <MoreHorizontal className="h-3.5 w-3.5" />
+                            <MoreHorizontal className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                         </Button>
                     </MenuButton>
                     <MenuItems className="absolute right-0 mt-1 w-32 bg-popover border border-border rounded-lg shadow-lg z-50 focus:outline-none py-1">

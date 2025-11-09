@@ -13,10 +13,10 @@ export default function History() {
 
     return (
         <div className="h-full flex flex-col">
-            <div className="px-4 py-3 border-b border-border bg-muted/50">
-                <h2 className="text-sm font-medium text-foreground">History</h2>
+            <div className="px-3 sm:px-4 py-2 sm:py-3 border-b border-border bg-muted/50">
+                <h2 className="text-xs sm:text-sm font-medium text-foreground">History</h2>
             </div>
-            <div className="flex-grow overflow-y-auto p-2">
+            <div className="flex-grow overflow-y-auto p-1.5 sm:p-2">
                 {conversations.length === 0 ? (
                     <div className="flex items-center justify-center h-32 text-center">
                         <p className="text-sm text-muted-foreground">

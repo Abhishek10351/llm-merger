@@ -18,11 +18,18 @@ export const metadata = {
     description: "A LLM powered chatbot",
 };
 
+export const viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+};
+
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
+                className={`${geistSans.variable} ${geistMono.variable} antialiased bg-muted`}
             >
                 <ReduxProvider>
                     <ProtectedRoute>{children}</ProtectedRoute>

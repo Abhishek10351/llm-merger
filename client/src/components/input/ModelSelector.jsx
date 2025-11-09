@@ -18,13 +18,13 @@ export default function LLMSelect({ onChange, value }) {
     ];
 
     return (
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
             <Select value={value} onValueChange={onChange}>
                 <SelectTrigger
                     size="sm"
-                    className="w-auto min-w-[120px] sm:min-w-[140px]"
+                    className="w-auto min-w-[90px] sm:min-w-[110px] md:min-w-[130px] text-xs sm:text-sm h-8 sm:h-9"
                 >
-                    <SelectValue placeholder="Select model" />
+                    <SelectValue placeholder="Model" />
                 </SelectTrigger>
                 <SelectContent align="end">
                     <SelectGroup>
