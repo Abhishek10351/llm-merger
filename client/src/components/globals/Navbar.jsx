@@ -19,7 +19,7 @@ export default function Navbar() {
     const dicebearUrl = `https://api.dicebear.com/9.x/fun-emoji/png/?size=40&backgroundColor=%23f0f0f0`;
 
     return (
-        <nav className="flex items-center justify-between bg-white border-b shadow-sm px-4 py-3 h-16">
+        <nav className="flex items-center justify-between bg-background border-b border-border shadow-sm px-4 py-3 h-16">
             <div className="flex items-center space-x-4">
                 <Image
                     src={dicebearUrl}
@@ -28,11 +28,11 @@ export default function Navbar() {
                     height={40}
                     className="rounded-full"
                 />
-                <h1 className="text-gray-900 text-xl font-bold">Chatbot</h1>
+                <h1 className="text-foreground text-xl font-bold">Chatbot</h1>
             </div>
             {isLoggedIn ? (
                 <div className="flex items-center space-x-4">
-                    <span className="text-gray-700 font-medium">
+                    <span className="text-muted-foreground font-medium">
                         {user?.first_name || "User"}
                     </span>
                     <Button

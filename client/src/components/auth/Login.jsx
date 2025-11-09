@@ -67,13 +67,13 @@ export default function Login() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-muted">
             <div className="w-full max-w-sm px-4">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                    <h1 className="text-3xl font-bold text-foreground mb-2">
                         LLM Merger
                     </h1>
-                    <p className="text-gray-600">Sign in to your account</p>
+                    <p className="text-muted-foreground">Sign in to your account</p>
                 </div>
                 <Card className="w-full">
                     <CardHeader>
@@ -149,11 +149,11 @@ export default function Login() {
                     </CardContent>
                 </Card>
                 <div className="mt-6 text-center">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                         Don't have an account?{" "}
                         <Button
                             variant="link"
-                            className="p-0 h-auto font-normal text-blue-600 hover:text-blue-800"
+                            className="p-0 h-auto font-normal text-primary hover:text-primary/80"
                             onClick={() => router.push("/auth/register")}
                         >
                             Sign up

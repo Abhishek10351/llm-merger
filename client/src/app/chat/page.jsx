@@ -54,20 +54,20 @@ export default function ChatHomePage() {
             <ChatSidebar />
 
             {/* Main Content */}
-            <main className="flex-grow flex flex-col bg-gray-50 p-2 sm:p-4">
-                <div className="bg-white border rounded-lg shadow-sm h-full flex flex-col overflow-hidden">
+            <main className="flex-grow flex flex-col bg-muted p-2 sm:p-4">
+                <div className="bg-background border border-border rounded-lg shadow-sm h-full flex flex-col overflow-hidden">
                     {/* Header */}
-                    <div className="border-b px-4 py-6 bg-gradient-to-r from-blue-50 to-indigo-50">
+                    <div className="border-b border-border px-4 py-6 bg-gradient-to-r from-muted/50 to-primary/10">
                         <div className="text-center">
-                            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                            <h1 className="text-2xl font-bold text-foreground mb-2">
                                 Welcome to LLM Merger
                             </h1>
-                            <p className="text-gray-600 text-sm">
+                            <p className="text-muted-foreground text-sm">
                                 Compare responses from multiple AI models
                             </p>
                         </div>
                         {error && (
-                            <div className="mt-3 text-red-600 text-sm text-center bg-red-50 px-3 py-2 rounded-lg">
+                            <div className="mt-3 text-destructive text-sm text-center bg-destructive/10 px-3 py-2 rounded-lg">
                                 {error}
                             </div>
                         )}
@@ -78,14 +78,14 @@ export default function ChatHomePage() {
                         {messages.length === 0 ? (
                             <div className="flex items-center justify-center h-full">
                                 <div className="text-center space-y-4 max-w-md">
-                                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                                        <MessageCircle className="h-8 w-8 text-blue-600" />
+                                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                                        <MessageCircle className="h-8 w-8 text-primary" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                                        <h3 className="text-lg font-semibold text-foreground mb-2">
                                             Start Your First Conversation
                                         </h3>
-                                        <p className="text-gray-600 text-sm">
+                                        <p className="text-muted-foreground text-sm">
                                             Ask a question and see responses
                                             from different AI models side by
                                             side
@@ -99,7 +99,7 @@ export default function ChatHomePage() {
                     </div>
 
                     {/* Input Area */}
-                    <div className="border-t p-4 bg-gray-50/50">
+                    <div className="border-t border-border p-4 bg-muted/50">
                         <div className="max-w-4xl mx-auto">
                             <ChatInput
                                 value={input}

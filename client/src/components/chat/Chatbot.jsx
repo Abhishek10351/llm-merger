@@ -81,10 +81,10 @@ export default function Chatbot({ chat_id }) {
     return (
         <Card className="flex flex-col h-full overflow-hidden p-0">
             {/* Header with model selector */}
-            <div className="border-b px-4 py-3 bg-gray-50">
+            <div className="border-b border-border px-4 py-3 bg-muted">
                 <ModelSelector onChange={setSelectedLlm} value={selectedLlm} />
                 {error && (
-                    <div className="mt-2 text-sm text-red-600 bg-red-50 px-3 py-2 rounded">
+                    <div className="mt-2 text-sm text-destructive bg-destructive/10 px-3 py-2 rounded">
                         {error}
                     </div>
                 )}
@@ -95,10 +95,10 @@ export default function Chatbot({ chat_id }) {
                 {loading && messages.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center">
-                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <div className="animate-spin h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
                             </div>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-muted-foreground">
                                 Loading conversation...
                             </p>
                         </div>
@@ -114,7 +114,7 @@ export default function Chatbot({ chat_id }) {
             </div>
 
             {/* Input area */}
-            <div className="border-t p-4 bg-white">
+            <div className="border-t border-border p-4 bg-background">
                 <ChatInput
                     value={input}
                     onChange={(e) => setInput(e.target.value)}

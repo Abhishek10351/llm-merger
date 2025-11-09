@@ -27,14 +27,14 @@ export default function HistoryButton({ id, title, onDelete }) {
     return (
         <div
             key={id}
-            className="group p-2 bg-white hover:bg-gray-50 text-gray-900 rounded-lg cursor-pointer transition-all duration-200 border border-gray-100 hover:border-gray-200 hover:shadow-sm"
+            className="group p-2 bg-card hover:bg-accent text-card-foreground rounded-lg cursor-pointer transition-all duration-200 border border-border hover:border-border/60 hover:shadow-sm"
             onClick={handleClick}
         >
             <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <MessageCircle className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+                    <MessageCircle className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                     <span
-                        className="text-sm text-gray-700 truncate"
+                        className="text-sm text-foreground truncate"
                         title={title}
                     >
                         {title}
@@ -45,19 +45,19 @@ export default function HistoryButton({ id, title, onDelete }) {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-100"
+                            className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-accent"
                             title="More Options"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <MoreHorizontal className="h-3.5 w-3.5" />
                         </Button>
                     </MenuButton>
-                    <MenuItems className="absolute right-0 mt-1 w-32 bg-white border rounded-lg shadow-lg z-50 focus:outline-none py-1">
+                    <MenuItems className="absolute right-0 mt-1 w-32 bg-popover border border-border rounded-lg shadow-lg z-50 focus:outline-none py-1">
                         <MenuItem>
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                                className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
                                 title="Delete Chat"
                                 onClick={handleDelete}
                             >

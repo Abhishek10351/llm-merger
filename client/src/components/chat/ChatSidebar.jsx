@@ -22,15 +22,15 @@ export default function Sidebar() {
         <aside
             className={`${
                 isSidebarOpen ? "w-64" : "w-16"
-            } bg-white shadow-sm border-r border-gray-200 transition-all duration-300 h-full flex flex-col overflow-hidden shrink-0`}
+            } bg-card shadow-sm border-r border-border transition-all duration-300 h-full flex flex-col overflow-hidden shrink-0`}
         >
             {/* Header with toggle */}
-            <div className="p-3 border-b flex items-center justify-between min-h-[3.5rem] bg-gray-50/50">
+            <div className="p-3 border-b border-border flex items-center justify-between min-h-[3.5rem] bg-muted/50">
                 <Button
                     variant="ghost"
                     size="icon"
                     onClick={toggleSidebar}
-                    className="hover:bg-gray-200/50"
+                    className="hover:bg-accent"
                 >
                     {isSidebarOpen ? (
                         <X className="h-4 w-4" />
@@ -39,7 +39,7 @@ export default function Sidebar() {
                     )}
                 </Button>
                 {isSidebarOpen && (
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-foreground">
                         LLM Merger
                     </span>
                 )}
@@ -53,7 +53,7 @@ export default function Sidebar() {
                         <Button
                             onClick={handleNewChat}
                             variant="default"
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                            className="w-full shadow-sm"
                             size="sm"
                         >
                             <Plus className="h-4 w-4 mr-2" />
