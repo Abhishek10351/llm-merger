@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/store/authSlice";
 import { clearHistory, addAllConversations } from "@/store/historySlice";
-import MainLayout from "@/components/layout/MainLayout";
 
 export default function ProtectedRoute({ children }) {
     const dispatch = useDispatch();
@@ -78,5 +77,11 @@ export default function ProtectedRoute({ children }) {
         );
     }
 
-    return <MainLayout>{children}</MainLayout>;
+    return (
+        <div className="h-screen bg-muted flex flex-col overflow-hidden">
+            <main className="flex-grow overflow-hidden min-h-0">
+                {children}
+            </main>
+        </div>
+    );
 }
