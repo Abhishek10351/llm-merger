@@ -5,7 +5,7 @@ import { Trash2, MoreHorizontal, MessageCircle } from "lucide-react";
 import { api } from "@/utils";
 import { Button } from "@/components/ui/button";
 
-export default function HistoryButton({ id, title, onDelete }) {
+export default function ChatHistoryButton({ id, title, onDelete }) {
     const router = useRouter();
 
     const handleClick = (e) => {

@@ -10,7 +10,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-export default function LLMSelect({ onChange, value }) {
+export default function ModelSelector({ onChange, value }) {
     const options = [
         { value: "gemini_content", label: "Gemini" },
         { value: "deepseek_content", label: "DeepSeek" },

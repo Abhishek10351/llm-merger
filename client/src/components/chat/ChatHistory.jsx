@@ -1,9 +1,9 @@
 "use client";
-import HistoryButton from "./ChatHistoryButton";
+import ChatHistoryButton from "./ChatHistoryButton";
 import { useSelector, useDispatch } from "react-redux";
 import { removeConversation } from "@/store/historySlice";
 
-export default function History() {
+export default function ChatHistory() {
     const { conversations } = useSelector((state) => state.history);
     const dispatch = useDispatch();
 
@@ -26,7 +26,7 @@ export default function History() {
                 ) : (
                     <div className="flex flex-col space-y-1">
                         {conversations.map((message) => (
-                            <HistoryButton
+                            <ChatHistoryButton
                                 key={message.id}
                                 id={message.id}
                                 title={message.title}

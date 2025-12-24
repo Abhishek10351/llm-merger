@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Plus, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function Sidebar() {
+export default function ChatSidebar() {
     // Auto-open sidebar on desktop, closed on mobile
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const router = useRouter();

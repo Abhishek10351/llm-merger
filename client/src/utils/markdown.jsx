@@ -6,7 +6,7 @@ import "katex/dist/katex.min.css";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
-const components_style = {
+const markdownComponents = {
     ul: ({ children }) => (
         <ul className="list-disc pl-8 mb-4 text-foreground">{children}</ul>
     ),
@@ -160,4 +160,4 @@ export const markdownPlugins = {
     rehypePlugins: [rehypeKatex],
 };
 
-export default components_style;
+export default markdownComponents;

@@ -2,7 +2,7 @@ import { Loader2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function InputSection({ value, onChange, onSubmit, loading }) {
+export default function ChatInput({ value, onChange, onSubmit, loading }) {
     // Auto-adjust rows based on content
     const getRows = () => {
         if (!value) return 1;

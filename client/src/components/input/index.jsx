@@ -1,2 +1,2 @@
-export { default as ChatInput } from "./ChatInput.jsx";
-export { default as ModelSelector } from "./ModelSelector.jsx";
+export { default as ChatInput } from "./ChatInput";
+export { default as ModelSelector } from "./ModelSelector";
